@@ -357,12 +357,12 @@ const CreateInstancePage: React.FC = () => {
 
   const [formData, setFormData] = useState<CreateInstanceRequest>({
     name: "",
-    type: "hermesagent",
+    type: "openclaw",
     cpu_cores: 2,
     memory_gb: 4,
     disk_gb: 20,
-    os_type: "ubuntu",
-    os_version: "22.04",
+    os_type: "openclaw",
+    os_version: "latest",
     gpu_enabled: false,
     gpu_count: 0,
     storage_class: "",
