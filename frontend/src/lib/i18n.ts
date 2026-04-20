@@ -1733,6 +1733,10 @@ export const translations: Record<Locale, TranslationTree> = {
           label: "Custom Image",
           description: "Use your own custom image",
         },
+        hermesagent: {
+          label: "HermesAgent Desktop",
+          description: "HermesAgent desktop environment",
+        },
       },
       presetOptions: {
         small: {
@@ -2883,6 +2887,10 @@ export const translations: Record<Locale, TranslationTree> = {
         custom: {
           label: "自定义镜像",
           description: "使用你自己的自定义镜像",
+        },
+        hermesagent: {
+          label: "HermesAgent 桌面",
+          description: "HermesAgent 桌面环境",
         },
       },
       presetOptions: {
@@ -4047,6 +4055,10 @@ export const translations: Record<Locale, TranslationTree> = {
         custom: {
           label: "カスタムイメージ",
           description: "独自のカスタムイメージを使用",
+        },
+        hermesagent: {
+          label: "HermesAgent デスクトップ",
+          description: "HermesAgent デスクトップ環境",
         },
       },
       presetOptions: {
@@ -5226,6 +5238,10 @@ export const translations: Record<Locale, TranslationTree> = {
         custom: {
           label: "사용자 지정 이미지",
           description: "직접 준비한 사용자 지정 이미지를 사용합니다",
+        },
+        hermesagent: {
+          label: "HermesAgent 데스크톱",
+          description: "HermesAgent 데스크톱 환경",
         },
       },
       presetOptions: {
@@ -6423,6 +6439,10 @@ export const translations: Record<Locale, TranslationTree> = {
         custom: {
           label: "Benutzerdefiniertes Image",
           description: "Eigenes benutzerdefiniertes Image verwenden",
+        },
+        hermesagent: {
+          label: "HermesAgent-Desktop",
+          description: "HermesAgent-Desktop-Umgebung",
         },
       },
       presetOptions: {

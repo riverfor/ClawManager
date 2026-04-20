@@ -9,6 +9,7 @@ import {
 
 const IMAGE_TYPE_OPTIONS = [
   { value: 'openclaw', label: 'OpenClaw Desktop', defaultImage: 'ghcr.io/yuan-lab-llm/clawmanager-openclaw-image/openclaw:latest' },
+  { value: 'hermesagent', label: 'HermesAgent Desktop', defaultImage: 'ghcr.io/quseit/qagent-image/openskill-hermesagent:latest' },
   { value: 'ubuntu', label: 'Ubuntu Desktop', defaultImage: 'lscr.io/linuxserver/webtop:ubuntu-xfce' },
   { value: 'webtop', label: 'Webtop Desktop', defaultImage: 'lscr.io/linuxserver/webtop:ubuntu-xfce' },
   { value: 'debian', label: 'Debian Desktop', defaultImage: 'docker.io/clawreef/debian-desktop:12' },

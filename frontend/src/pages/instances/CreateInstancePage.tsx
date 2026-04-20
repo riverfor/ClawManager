@@ -46,6 +46,10 @@ const INSTANCE_TYPE_I18N_KEYS: Record<
   string,
   { label: string; description: string }
 > = {
+  hermesagent: {
+    label: "instances.typeOptions.hermesagent.label",
+    description: "instances.typeOptions.hermesagent.description",
+  },
   ubuntu: {
     label: "instances.typeOptions.ubuntu.label",
     description: "instances.typeOptions.ubuntu.description",
@@ -121,6 +125,56 @@ const getBuiltInEnvTemplates = (
         key: "SUBFOLDER",
         description: t("instances.envDescProxySubfolder"),
         defaultLabel: t("instances.envManagedProxyPath"),
+      },
+    );
+  }
+
+  if (type === "hermesagent") {
+    templates.push(
+      {
+        key: "TITLE",
+        description: t("instances.envDescDesktopTitleWebtop"),
+        defaultValue: "HermesAgent Desktop",
+      },
+      {
+        key: "SUBFOLDER",
+        description: t("instances.envDescProxySubfolder"),
+        defaultLabel: t("instances.envManagedProxyPath"),
+      },
+      {
+        key: "CLAWMANAGER_AGENT_ENABLED",
+        description: t("instances.envDescAgentEnabled"),
+        defaultValue: "true",
+      },
+      {
+        key: "CLAWMANAGER_AGENT_BASE_URL",
+        description: t("instances.envDescAgentBaseUrl"),
+        defaultLabel: t("instances.envGeneratedAtRuntime"),
+      },
+      {
+        key: "CLAWMANAGER_AGENT_BOOTSTRAP_TOKEN",
+        description: t("instances.envDescAgentBootstrapToken"),
+        defaultLabel: t("instances.envGeneratedAtRuntime"),
+      },
+      {
+        key: "CLAWMANAGER_AGENT_DISK_LIMIT_BYTES",
+        description: t("instances.envDescAgentDiskLimitBytes"),
+        defaultValue: String(diskGb * BYTES_PER_GIB),
+      },
+      {
+        key: "CLAWMANAGER_AGENT_INSTANCE_ID",
+        description: t("instances.envDescAgentInstanceId"),
+        defaultLabel: t("instances.envAssignedAfterCreation"),
+      },
+      {
+        key: "CLAWMANAGER_AGENT_PERSISTENT_DIR",
+        description: t("instances.envDescAgentPersistentDir"),
+        defaultValue: "/config",
+      },
+      {
+        key: "CLAWMANAGER_AGENT_PROTOCOL_VERSION",
+        description: t("instances.envDescAgentProtocolVersion"),
+        defaultValue: AGENT_PROTOCOL_VERSION,
       },
     );
   }
@@ -303,7 +357,7 @@ const CreateInstancePage: React.FC = () => {
 
   const [formData, setFormData] = useState<CreateInstanceRequest>({
     name: "",
-    type: "ubuntu",
+    type: "hermesagent",
     cpu_cores: 2,
     memory_gb: 4,
     disk_gb: 20,
@@ -771,11 +825,11 @@ const CreateInstancePage: React.FC = () => {
     .map((resource) => resource.name);
 
   const renderTypeIcon = (typeId: string) => {
-    if (typeId === "openclaw") {
+    if (typeId === "openclaw" || typeId === "hermesagent") {
       return (
         <img
-          src="/openclaw.png"
-          alt="OpenClaw"
+          src={typeId === "hermesagent" ? "/hermesagent.png" : "/openclaw.png"}
+          alt={typeId === "hermesagent" ? "HermesAgent" : "OpenClaw"}
           className="h-10 w-10 object-contain"
         />
       );

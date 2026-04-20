@@ -6,7 +6,7 @@ export interface Instance {
   user_id: number;
   name: string;
   description?: string;
-  type: "openclaw" | "ubuntu" | "debian" | "centos" | "custom" | "webtop";
+  type: "openclaw" | "ubuntu" | "debian" | "centos" | "custom" | "webtop" | "hermesagent";
   status: "creating" | "running" | "stopped" | "error" | "deleting";
   cpu_cores: number;
   memory_gb: number;
@@ -109,7 +109,7 @@ export interface InstanceConfigRevision {
 export interface CreateInstanceRequest {
   name: string;
   description?: string;
-  type: "openclaw" | "ubuntu" | "debian" | "centos" | "custom" | "webtop";
+  type: "openclaw" | "ubuntu" | "debian" | "centos" | "custom" | "webtop" | "hermesagent";
   cpu_cores: number;
   memory_gb: number;
   disk_gb: number;
@@ -148,6 +148,22 @@ export interface InstanceType {
 
 export const INSTANCE_TYPES: InstanceType[] = [
   {
+    id: "openclaw",
+    name: "OpenClaw Desktop",
+    description: "Optimized desktop environment",
+    icon: "openclaw",
+    defaultOs: "openclaw",
+    defaultVersion: "latest",
+  },
+  {
+    id: "hermesagent",
+    name: "HermesAgent Desktop",
+    description: "HermesAgent桌面环境",
+    icon: "hermesagent",
+    defaultOs: "ubuntu",
+    defaultVersion: "22.04",
+  },
+  {
     id: "ubuntu",
     name: "Ubuntu Desktop",
     description: "Popular Linux distribution with GNOME desktop",
@@ -170,14 +186,6 @@ export const INSTANCE_TYPES: InstanceType[] = [
     icon: "centos",
     defaultOs: "centos",
     defaultVersion: "9",
-  },
-  {
-    id: "openclaw",
-    name: "OpenClaw Desktop",
-    description: "Optimized desktop environment",
-    icon: "openclaw",
-    defaultOs: "openclaw",
-    defaultVersion: "latest",
   },
   {
     id: "webtop",

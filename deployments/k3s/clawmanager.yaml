@@ -43,7 +43,7 @@ data:
       user_id INT NOT NULL,
       name VARCHAR(255) NOT NULL,
       description TEXT,
-      type ENUM('openclaw', 'ubuntu', 'debian', 'centos', 'custom', 'webtop') DEFAULT 'ubuntu',
+      type ENUM('openclaw', 'ubuntu', 'debian', 'centos', 'custom', 'webtop', 'hermesagent') DEFAULT 'ubuntu',
       status ENUM('creating', 'running', 'stopped', 'error', 'deleting') DEFAULT 'creating',
       cpu_cores DECIMAL(10,2) NOT NULL,
       memory_gb INT NOT NULL,
@@ -697,6 +697,9 @@ spec:
   selector:
     app: clawmanager-app
   ports:
+    - name: http
+      port: 80
+      targetPort: 8080
     - name: https
       port: 443
       targetPort: 8443
@@ -784,3 +787,23 @@ spec:
     - name: http
       port: 8000
       targetPort: http
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clawmanager
+  namespace: clawmanager-system
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+    - host: clawmanager.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: clawmanager-frontend
+                port:
+                  number: 80

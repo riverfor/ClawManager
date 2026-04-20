@@ -70,6 +70,17 @@ func buildRuntimeConfig(instanceType, osType, osVersion string, registry, tag *s
 			"TITLE":     "ClawManager Desktop",
 			"SUBFOLDER": "/",
 		}
+	case "hermesagent":
+		config.MountPath = "/config"
+		if (registry == nil || strings.TrimSpace(*registry) == "") && (tag == nil || strings.TrimSpace(*tag) == "") {
+			config.Image = defaultSystemImageSettings["hermesagent"]
+		} else {
+			config.Image = fmt.Sprintf("%s/%s:%s", defaultRegistry, "hermesagent-desktop", defaultTag)
+		}
+		config.Env = map[string]string{
+			"TITLE":     "ClawManager Desktop",
+			"SUBFOLDER": "/",
+		}
 	case "debian":
 		config.Image = fmt.Sprintf("%s/%s:%s", defaultRegistry, "debian-desktop", defaultTag)
 	case "centos":
@@ -91,7 +102,7 @@ func defaultPortForInstanceType(instanceType string) int32 {
 
 func defaultMountPathForInstanceType(instanceType string) string {
 	switch instanceType {
-	case "ubuntu", "webtop", "openclaw":
+	case "ubuntu", "webtop", "openclaw", "hermesagent":
 		return "/config"
 	default:
 		return "/home/user/data"
@@ -100,7 +111,7 @@ func defaultMountPathForInstanceType(instanceType string) string {
 
 func defaultEnvForInstanceType(instanceType string) map[string]string {
 	switch instanceType {
-	case "ubuntu", "webtop", "openclaw":
+	case "ubuntu", "webtop", "openclaw", "hermesagent":
 		return map[string]string{
 			"TITLE":     "ClawManager Desktop",
 			"SUBFOLDER": "/",
@@ -135,7 +146,7 @@ func withInstanceProxyEnv(instanceType string, instanceID int, env map[string]st
 
 func usesWebtopImage(instanceType string) bool {
 	switch instanceType {
-	case "ubuntu", "webtop", "openclaw":
+	case "ubuntu", "webtop", "openclaw", "hermesagent":
 		return true
 	default:
 		return false
