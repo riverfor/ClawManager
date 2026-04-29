@@ -123,7 +123,7 @@ jobs:
           text = path.read_text(encoding="utf-8")
 
           text = text.replace(
-              "image: ghcr.io/yuan-lab-llm/clawmanager:latest",
+              "image: ghcr.io/quseit/clawmanager:latest",
               "image: clawmanager:ci",
           )
 

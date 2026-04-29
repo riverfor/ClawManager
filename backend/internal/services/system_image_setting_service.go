@@ -30,8 +30,8 @@ var supportedSystemImageTypes = map[string]string{
 }
 
 var defaultSystemImageSettings = map[string]string{
-	"hermesagent": "ghcr.io/quseit/qagent-image/openskill-hermesagent:latest",
-	"openclaw":    "ghcr.io/yuan-lab-llm/clawmanager-openclaw-image/openclaw:latest",
+	"hermesagent": "ghcr.io/quseit/qagent-image/hermesagent:latest",
+	"openclaw":    "ghcr.io/quseit/qagent-image/openclaw:latest",
 	"ubuntu":      "lscr.io/linuxserver/webtop:ubuntu-xfce",
 	"webtop":      "lscr.io/linuxserver/webtop:ubuntu-xfce",
 	"debian":      "docker.io/clawreef/debian-desktop:12",

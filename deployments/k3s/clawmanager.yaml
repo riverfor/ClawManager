@@ -618,7 +618,7 @@ spec:
       serviceAccountName: clawmanager-app
       containers:
         - name: clawmanager-app
-          image: ghcr.io/yuan-lab-llm/clawmanager:latest
+          image: ghcr.io/quseit/clawmanager:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

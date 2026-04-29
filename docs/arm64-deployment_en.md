@@ -10,14 +10,14 @@ The following images can be used for ARM64 deployments:
 
 | Image | Address | Description |
 |-------|---------|-------------|
-| ClawManager Main App | `ghcr.io/yuan-lab-llm/clawmanager:latest` | Official multi-platform image with ARM64 support |
+| ClawManager Main App | `ghcr.io/quseit/clawmanager:latest` | Official multi-platform image with ARM64 support |
 | Skill Scanner | `ghcr.io/yuan-lab-llm/skill-scanner:latest` | Official image now supports ARM64 |
 
 ### Using Pre-built Images
 
 ```bash
 # Pull ARM64 images
-docker pull ghcr.io/yuan-lab-llm/clawmanager:latest --platform linux/arm64
+docker pull ghcr.io/quseit/clawmanager:latest --platform linux/arm64
 docker pull ghcr.io/yuan-lab-llm/skill-scanner:latest --platform linux/arm64
 ```
 
@@ -66,7 +66,7 @@ In `clawmanager.yaml`, make sure the image addresses support ARM64:
 
 ```yaml
 # Main app
-image: ghcr.io/yuan-lab-llm/clawmanager:latest
+image: ghcr.io/quseit/clawmanager:latest
 
 # skill-scanner (if needed)
 image: ghcr.io/yuan-lab-llm/skill-scanner:latest
@@ -90,7 +90,7 @@ FLUSH PRIVILEGES;
 
 ### ClawManager Official Image Supports ARM64
 
-- **Status**: `ghcr.io/yuan-lab-llm/clawmanager:latest` is published as a multi-platform image
+- **Status**: `ghcr.io/quseit/clawmanager:latest` is published as a multi-platform image
 - **Platforms**: `linux/amd64`, `linux/arm64`
 - **Deployment impact**: ARM64 nodes automatically pull the matching main app image without a separate ARM-only tag
 
