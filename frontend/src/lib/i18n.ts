@@ -202,7 +202,7 @@ const securityCenterTranslations: Record<Locale, TranslationTree> = {
       deepMode: "Deep Mode",
       deepModeDesc: "Run scans with deep analyzers.",
       applySummary:
-        "Saving also updates ClawManager quick/deep policies, updates the skill-scanner Deployment environment variables, and waits for rollout completion so the new configuration is live immediately.",
+        "Saving also updates AgentManager quick/deep policies, updates the skill-scanner Deployment environment variables, and waits for rollout completion so the new configuration is live immediately.",
       loadingConfig: "Loading configuration...",
       timeoutSeconds: "Timeout (seconds)",
       invocationMethod: "Invocation Method",
@@ -386,7 +386,7 @@ const securityCenterTranslations: Record<Locale, TranslationTree> = {
       deepMode: "Deep 模式",
       deepModeDesc: "使用 deep analyzers 执行扫描。",
       applySummary:
-        "保存后会同时更新 ClawManager 的 quick/deep 扫描策略、更新 skill-scanner Deployment 的环境变量，并等待 rollout 完成让新配置实时生效。",
+        "保存后会同时更新 AgentManager 的 quick/deep 扫描策略、更新 skill-scanner Deployment 的环境变量，并等待 rollout 完成让新配置实时生效。",
       loadingConfig: "正在加载配置...",
       timeoutSeconds: "超时（秒）",
       invocationMethod: "调用方法",
@@ -585,7 +585,7 @@ const securityCenterTranslations: Record<Locale, TranslationTree> = {
       deepMode: "Deep モード",
       deepModeDesc: "deep analyzers でスキャンします。",
       applySummary:
-        "保存すると ClawManager の quick/deep ポリシー更新、skill-scanner Deployment の環境変数更新、rollout 完了待機がまとめて実行されます。",
+        "保存すると AgentManager の quick/deep ポリシー更新、skill-scanner Deployment の環境変数更新、rollout 完了待機がまとめて実行されます。",
       loadingConfig: "設定を読み込み中...",
       timeoutSeconds: "タイムアウト（秒）",
       invocationMethod: "呼び出し方式",
@@ -779,7 +779,7 @@ const securityCenterTranslations: Record<Locale, TranslationTree> = {
       deepMode: "Deep 모드",
       deepModeDesc: "deep analyzers 로 스캔합니다.",
       applySummary:
-        "저장하면 ClawManager quick/deep 정책 업데이트, skill-scanner Deployment 환경 변수 업데이트, rollout 완료 대기가 함께 실행됩니다.",
+        "저장하면 AgentManager quick/deep 정책 업데이트, skill-scanner Deployment 환경 변수 업데이트, rollout 완료 대기가 함께 실행됩니다.",
       loadingConfig: "구성을 불러오는 중...",
       timeoutSeconds: "시간 제한(초)",
       invocationMethod: "호출 방식",
@@ -979,7 +979,7 @@ const securityCenterTranslations: Record<Locale, TranslationTree> = {
       deepMode: "Deep-Modus",
       deepModeDesc: "Scans mit Deep-Analyzern ausführen.",
       applySummary:
-        "Beim Speichern werden außerdem die Quick/Deep-Richtlinien von ClawManager aktualisiert, die Umgebungsvariablen des skill-scanner Deployments angepasst und der Rollout bis zur sofort wirksamen Aktivierung abgewartet.",
+        "Beim Speichern werden außerdem die Quick/Deep-Richtlinien von AgentManager aktualisiert, die Umgebungsvariablen des skill-scanner Deployments angepasst und der Rollout bis zur sofort wirksamen Aktivierung abgewartet.",
       loadingConfig: "Konfiguration wird geladen...",
       timeoutSeconds: "Timeout (Sekunden)",
       invocationMethod: "Aufrufmethode",
@@ -1001,7 +1001,7 @@ const securityCenterTranslations: Record<Locale, TranslationTree> = {
 export const translations: Record<Locale, TranslationTree> = {
   en: {
     app: {
-      name: "ClawManager",
+      name: "AgentManager",
     },
     common: {
       loading: "Loading...",
@@ -1064,7 +1064,7 @@ export const translations: Record<Locale, TranslationTree> = {
     adminLayout: adminLayoutTranslations.en,
     securityCenter: securityCenterTranslations.en,
     auth: {
-      signInTitle: "Sign in to ClawManager",
+      signInTitle: "Sign in to AgentManager",
       subtitle: "Virtual Desktop Management Platform",
       username: "Username",
       password: "Password",
@@ -1076,7 +1076,7 @@ export const translations: Record<Locale, TranslationTree> = {
       noAccount: "Don't have an account?",
       signUp: "Sign up",
       createAccount: "Create your account",
-      joinToday: "Join ClawManager today",
+      joinToday: "Join AgentManager today",
       chooseUsername: "Choose a username",
       enterEmail: "Enter your email",
       createPassword: "Create a password (min 8 chars)",
@@ -1737,7 +1737,7 @@ export const translations: Record<Locale, TranslationTree> = {
         webtop: {
           label: "Webtop Desktop",
           description:
-            "Browser-based Linux desktop proxied through ClawManager",
+            "Browser-based Linux desktop proxied through AgentManager",
         },
         custom: {
           label: "Custom Image",
@@ -1773,14 +1773,14 @@ export const translations: Record<Locale, TranslationTree> = {
       presetRamShort: "RAM",
       presetDiskShort: "Disk",
       environmentVariables: "Environment Variables",
-      clawManagerBuiltIns: "ClawManager Built-ins",
+      clawManagerBuiltIns: "AgentManager Built-ins",
       hideBuiltIns: "Hide Built-ins",
       editBuiltIns: "Edit Built-ins",
       editBuiltInsCount: "Edit Built-ins ({count})",
       builtinOverridesConfigured:
         "{count} built-in override(s) configured. Expand to review or edit them.",
       usingBuiltInDefaults:
-        "Using ClawManager defaults for {count} built-in variables.",
+        "Using AgentManager defaults for {count} built-in variables.",
       builtinOverrideHelp:
         "Add only the built-ins you want to override. Unlisted variables will keep their default injected values.",
       addBuiltinVariable: "Add Built-in Variable",
@@ -1798,7 +1798,7 @@ export const translations: Record<Locale, TranslationTree> = {
       customEnvNameRequired: "Custom environment variable name is required.",
       invalidEnvName: "Invalid environment variable name: {name}",
       reservedBuiltinEnvName:
-        "{name} is a ClawManager built-in variable. Edit it in the built-in section instead.",
+        "{name} is an AgentManager built-in variable. Edit it in the built-in section instead.",
       duplicateEnvName: "Duplicate environment variable name: {name}",
       openClawInjection: "OpenClaw Injection",
       selectedCount: "{count} selected",
@@ -1818,25 +1818,25 @@ export const translations: Record<Locale, TranslationTree> = {
       compilingOpenClawPreview: "Compiling OpenClaw resource preview...",
       noChannelsSelectedForInjection: "No channels selected for injection.",
       skillInjection: "Skill Injection",
-      envManagedProxyPath: "ClawManager managed proxy path",
-      envGeneratedAtRuntime: "ClawManager generated at runtime",
+      envManagedProxyPath: "AgentManager managed proxy path",
+      envGeneratedAtRuntime: "AgentManager generated at runtime",
       envAssignedAfterCreation: "Assigned after creation",
-      envManagedAtRuntime: "ClawManager managed at runtime",
+      envManagedAtRuntime: "AgentManager managed at runtime",
       envDescDesktopTitleWebtop:
         "Desktop window title injected for the LinuxServer Webtop container.",
       envDescDesktopTitleOpenClaw:
         "Desktop title shown by the OpenClaw browser desktop image.",
       envDescProxySubfolder:
-        "Path prefix used by the ClawManager reverse proxy for browser access.",
+        "Path prefix used by the AgentManager reverse proxy for browser access.",
       envDescLlmBaseUrl:
-        "OpenClaw gateway base URL generated by ClawManager at runtime.",
+        "OpenClaw gateway base URL generated by AgentManager at runtime.",
       envDescLlmApiKey:
-        "Per-instance API key minted by ClawManager for the gateway.",
+        "Per-instance API key minted by AgentManager for the gateway.",
       envDescLlmModel:
         "Gateway model catalog JSON injected into the OpenClaw workspace, with auto kept as the default entry.",
       envDescLlmProvider: "Provider hint for the OpenClaw workspace.",
       envDescInstanceToken:
-        "Per-instance token generated by ClawManager for workspace access.",
+        "Per-instance token generated by AgentManager for workspace access.",
       envDescOpenAiBaseUrl:
         "Compatibility alias for the OpenAI-compatible gateway base URL.",
       envDescOpenAiApiBase:
@@ -1844,18 +1844,18 @@ export const translations: Record<Locale, TranslationTree> = {
       envDescOpenAiApiKey: "Compatibility alias for the gateway API key.",
       envDescOpenAiModel: "Compatibility alias for the default model name.",
       envDescAgentEnabled:
-        "Toggles the ClawManager instance agent inside OpenClaw.",
+        "Toggles the AgentManager instance agent inside OpenClaw.",
       envDescAgentBaseUrl:
         "Base URL used by the in-instance agent control plane client.",
       envDescAgentBootstrapToken:
-        "Bootstrap token generated by ClawManager for the in-instance agent.",
+        "Bootstrap token generated by AgentManager for the in-instance agent.",
       envDescAgentDiskLimitBytes: "Disk quota injected for the instance agent.",
       envDescAgentInstanceId:
         "Runtime instance identifier provided to the in-instance agent.",
       envDescAgentPersistentDir:
         "Persistent workspace path mounted into the OpenClaw container.",
       envDescAgentProtocolVersion:
-        "Protocol version expected by ClawManager agent control.",
+        "Protocol version expected by AgentManager agent control.",
       gpuLabel: "GPU",
       cpuCoresValue: "{value} cores",
       gpuCountValue: "{count} GPU(s)",
@@ -1918,7 +1918,7 @@ export const translations: Record<Locale, TranslationTree> = {
         "Infrastructure stop was recorded for this instance.",
       timelineAgentRegistered: "Agent registered",
       timelineAgentRegisteredDetail:
-        "{agentId} connected to ClawManager using protocol {protocol}.",
+        "{agentId} connected to AgentManager using protocol {protocol}.",
       timelineRuntimeReported: "Runtime status reported",
       timelineRuntimeReportedDetail:
         "Agent reported gateway status {gatewayStatus} and infra status {infraStatus}.",
@@ -2200,7 +2200,7 @@ export const translations: Record<Locale, TranslationTree> = {
     },
   },
   zh: {
-    app: { name: "ClawManager" },
+    app: { name: "AgentManager" },
     common: {
       loading: "加载中...",
       logout: "退出登录",
@@ -2262,7 +2262,7 @@ export const translations: Record<Locale, TranslationTree> = {
     adminLayout: adminLayoutTranslations.zh,
     securityCenter: securityCenterTranslations.zh,
     auth: {
-      signInTitle: "登录 ClawManager",
+      signInTitle: "登录 AgentManager",
       subtitle: "虚拟桌面管理平台",
       username: "用户名",
       password: "密码",
@@ -2274,7 +2274,7 @@ export const translations: Record<Locale, TranslationTree> = {
       noAccount: "还没有账号？",
       signUp: "注册",
       createAccount: "创建你的账号",
-      joinToday: "立即加入 ClawManager",
+      joinToday: "立即加入 AgentManager",
       chooseUsername: "设置用户名",
       enterEmail: "请输入邮箱",
       createPassword: "创建密码（至少 8 位）",
@@ -2896,7 +2896,7 @@ export const translations: Record<Locale, TranslationTree> = {
         },
         webtop: {
           label: "Webtop 桌面",
-          description: "通过 ClawManager 代理的浏览器 Linux 桌面",
+          description: "通过 AgentManager 代理的浏览器 Linux 桌面",
         },
         custom: {
           label: "自定义镜像",
@@ -2931,14 +2931,14 @@ export const translations: Record<Locale, TranslationTree> = {
       presetRamShort: "RAM",
       presetDiskShort: "磁盘",
       environmentVariables: "环境变量",
-      clawManagerBuiltIns: "ClawManager 内置变量",
+      clawManagerBuiltIns: "AgentManager 内置变量",
       hideBuiltIns: "收起内置变量",
       editBuiltIns: "编辑内置变量",
       editBuiltInsCount: "编辑内置变量（{count}）",
       builtinOverridesConfigured:
         "已配置 {count} 个内置变量覆盖。展开即可查看或编辑。",
       usingBuiltInDefaults:
-        "当前对 {count} 个内置变量使用 ClawManager 默认值。",
+        "当前对 {count} 个内置变量使用 AgentManager 默认值。",
       builtinOverrideHelp:
         "只添加你想覆盖的内置变量。未列出的变量会继续使用默认注入值。",
       addBuiltinVariable: "添加内置变量",
@@ -2956,7 +2956,7 @@ export const translations: Record<Locale, TranslationTree> = {
       customEnvNameRequired: "自定义环境变量名称不能为空。",
       invalidEnvName: "环境变量名称无效：{name}",
       reservedBuiltinEnvName:
-        "{name} 是 ClawManager 内置变量，请到内置变量区域中编辑。",
+        "{name} 是 AgentManager 内置变量，请到内置变量区域中编辑。",
       duplicateEnvName: "环境变量名称重复：{name}",
       openClawInjection: "OpenClaw 注入",
       selectedCount: "已选择 {count} 个",
@@ -2974,34 +2974,34 @@ export const translations: Record<Locale, TranslationTree> = {
       compilingOpenClawPreview: "正在生成 OpenClaw 资源预览...",
       noChannelsSelectedForInjection: "还没有选择用于注入的 Channel。",
       skillInjection: "技能注入",
-      envManagedProxyPath: "ClawManager 管理的代理路径",
-      envGeneratedAtRuntime: "由 ClawManager 在运行时生成",
+      envManagedProxyPath: "AgentManager 管理的代理路径",
+      envGeneratedAtRuntime: "由 AgentManager 在运行时生成",
       envAssignedAfterCreation: "创建后分配",
-      envManagedAtRuntime: "由 ClawManager 在运行时管理",
+      envManagedAtRuntime: "由 AgentManager 在运行时管理",
       envDescDesktopTitleWebtop:
         "注入到 LinuxServer Webtop 容器中的桌面窗口标题。",
       envDescDesktopTitleOpenClaw:
         "显示在 OpenClaw 浏览器桌面镜像中的桌面标题。",
-      envDescProxySubfolder: "ClawManager 反向代理用于浏览器访问的路径前缀。",
+      envDescProxySubfolder: "AgentManager 反向代理用于浏览器访问的路径前缀。",
       envDescLlmBaseUrl:
-        "由 ClawManager 在运行时生成的 OpenClaw 网关基础 URL。",
-      envDescLlmApiKey: "ClawManager 为该实例生成的网关 API Key。",
+        "由 AgentManager 在运行时生成的 OpenClaw 网关基础 URL。",
+      envDescLlmApiKey: "AgentManager 为该实例生成的网关 API Key。",
       envDescLlmModel:
         "注入到 OpenClaw 工作区中的 Gateway 模型目录 JSON，首项保留为 auto。",
       envDescLlmProvider: "提供给 OpenClaw 工作区的 Provider 提示。",
-      envDescInstanceToken: "ClawManager 为工作区访问生成的实例令牌。",
+      envDescInstanceToken: "AgentManager 为工作区访问生成的实例令牌。",
       envDescOpenAiBaseUrl: "OpenAI 兼容网关基础 URL 的兼容别名。",
       envDescOpenAiApiBase: "OpenAI 兼容网关基础 URL 的兼容别名。",
       envDescOpenAiApiKey: "网关 API Key 的兼容别名。",
       envDescOpenAiModel: "默认模型名的兼容别名。",
       envDescAgentEnabled:
-        "控制是否在 OpenClaw 内启用 ClawManager 实例 Agent。",
+        "控制是否在 OpenClaw 内启用 AgentManager 实例 Agent。",
       envDescAgentBaseUrl: "实例内 Agent 控制平面客户端使用的基础 URL。",
-      envDescAgentBootstrapToken: "ClawManager 为实例内 Agent 生成的引导令牌。",
+      envDescAgentBootstrapToken: "AgentManager 为实例内 Agent 生成的引导令牌。",
       envDescAgentDiskLimitBytes: "注入给实例 Agent 的磁盘配额。",
       envDescAgentInstanceId: "提供给实例内 Agent 的运行时实例标识。",
       envDescAgentPersistentDir: "挂载到 OpenClaw 容器中的持久工作区路径。",
-      envDescAgentProtocolVersion: "ClawManager Agent 控制面期望的协议版本。",
+      envDescAgentProtocolVersion: "AgentManager Agent 控制面期望的协议版本。",
       gpuLabel: "GPU",
       cpuCoresValue: "{value} 核",
       gpuCountValue: "{count} 个 GPU",
@@ -3062,7 +3062,7 @@ export const translations: Record<Locale, TranslationTree> = {
       timelineInstanceStoppedDetail: "该实例已记录基础设施停止事件。",
       timelineAgentRegistered: "Agent 已注册",
       timelineAgentRegisteredDetail:
-        "{agentId} 已通过协议 {protocol} 连接到 ClawManager。",
+        "{agentId} 已通过协议 {protocol} 连接到 AgentManager。",
       timelineRuntimeReported: "运行时状态已上报",
       timelineRuntimeReportedDetail:
         "Agent 上报的网关状态为 {gatewayStatus}，基础设施状态为 {infraStatus}。",
@@ -3333,7 +3333,7 @@ export const translations: Record<Locale, TranslationTree> = {
     },
   },
   ja: {
-    app: { name: "ClawManager" },
+    app: { name: "AgentManager" },
     common: {
       loading: "読み込み中...",
       logout: "ログアウト",
@@ -3395,7 +3395,7 @@ export const translations: Record<Locale, TranslationTree> = {
     adminLayout: adminLayoutTranslations.ja,
     securityCenter: securityCenterTranslations.ja,
     auth: {
-      signInTitle: "ClawManager にサインイン",
+      signInTitle: "AgentManager にサインイン",
       subtitle: "仮想デスクトップ管理プラットフォーム",
       username: "ユーザー名",
       password: "パスワード",
@@ -3407,7 +3407,7 @@ export const translations: Record<Locale, TranslationTree> = {
       noAccount: "アカウントをお持ちでないですか？",
       signUp: "新規登録",
       createAccount: "アカウントを作成",
-      joinToday: "今すぐ ClawManager に参加",
+      joinToday: "今すぐ AgentManager に参加",
       chooseUsername: "ユーザー名を選択",
       enterEmail: "メールを入力",
       createPassword: "パスワードを作成（8文字以上）",
@@ -4074,7 +4074,7 @@ export const translations: Record<Locale, TranslationTree> = {
         webtop: {
           label: "Webtop デスクトップ",
           description:
-            "ClawManager 経由でプロキシされるブラウザベースの Linux デスクトップ",
+            "AgentManager 経由でプロキシされるブラウザベースの Linux デスクトップ",
         },
         custom: {
           label: "カスタムイメージ",
@@ -4110,14 +4110,14 @@ export const translations: Record<Locale, TranslationTree> = {
       presetRamShort: "RAM",
       presetDiskShort: "ディスク",
       environmentVariables: "環境変数",
-      clawManagerBuiltIns: "ClawManager 組み込み変数",
+      clawManagerBuiltIns: "AgentManager 組み込み変数",
       hideBuiltIns: "組み込み変数を隠す",
       editBuiltIns: "組み込み変数を編集",
       editBuiltInsCount: "組み込み変数を編集 ({count})",
       builtinOverridesConfigured:
         "{count} 件の組み込み変数上書きが設定されています。展開して確認または編集できます。",
       usingBuiltInDefaults:
-        "{count} 件の組み込み変数で ClawManager の既定値を使用しています。",
+        "{count} 件の組み込み変数で AgentManager の既定値を使用しています。",
       builtinOverrideHelp:
         "上書きしたい組み込み変数だけを追加してください。未指定の変数は既定の注入値のままです。",
       addBuiltinVariable: "組み込み変数を追加",
@@ -4135,7 +4135,7 @@ export const translations: Record<Locale, TranslationTree> = {
       customEnvNameRequired: "カスタム環境変数名は必須です。",
       invalidEnvName: "無効な環境変数名: {name}",
       reservedBuiltinEnvName:
-        "{name} は ClawManager の組み込み変数です。組み込みセクションで編集してください。",
+        "{name} は AgentManager の組み込み変数です。組み込みセクションで編集してください。",
       duplicateEnvName: "重複した環境変数名: {name}",
       openClawInjection: "OpenClaw 注入",
       selectedCount: "{count} 件を選択",
@@ -4154,26 +4154,26 @@ export const translations: Record<Locale, TranslationTree> = {
       compilingOpenClawPreview: "OpenClaw リソースのプレビューを生成中...",
       noChannelsSelectedForInjection: "注入する Channel が選択されていません。",
       skillInjection: "スキル注入",
-      envManagedProxyPath: "ClawManager が管理するプロキシパス",
-      envGeneratedAtRuntime: "ClawManager が実行時に生成",
+      envManagedProxyPath: "AgentManager が管理するプロキシパス",
+      envGeneratedAtRuntime: "AgentManager が実行時に生成",
       envAssignedAfterCreation: "作成後に割り当て",
-      envManagedAtRuntime: "ClawManager が実行時に管理",
+      envManagedAtRuntime: "AgentManager が実行時に管理",
       envDescDesktopTitleWebtop:
         "LinuxServer Webtop コンテナに注入されるデスクトップウィンドウのタイトルです。",
       envDescDesktopTitleOpenClaw:
         "OpenClaw ブラウザデスクトップイメージに表示されるデスクトップタイトルです。",
       envDescProxySubfolder:
-        "ブラウザアクセスで ClawManager リバースプロキシが使用するパスプレフィックスです。",
+        "ブラウザアクセスで AgentManager リバースプロキシが使用するパスプレフィックスです。",
       envDescLlmBaseUrl:
-        "ClawManager が実行時に生成する OpenClaw ゲートウェイのベース URL です。",
+        "AgentManager が実行時に生成する OpenClaw ゲートウェイのベース URL です。",
       envDescLlmApiKey:
-        "ClawManager がそのインスタンス用に発行するゲートウェイ API キーです。",
+        "AgentManager がそのインスタンス用に発行するゲートウェイ API キーです。",
       envDescLlmModel:
         "OpenClaw ワークスペースに注入される Gateway モデルカタログ JSON で、先頭は auto のままです。",
       envDescLlmProvider:
         "OpenClaw ワークスペースに渡されるプロバイダーヒントです。",
       envDescInstanceToken:
-        "ClawManager がワークスペースアクセス用に生成するインスタンストークンです。",
+        "AgentManager がワークスペースアクセス用に生成するインスタンストークンです。",
       envDescOpenAiBaseUrl:
         "OpenAI 互換ゲートウェイのベース URL 用の互換エイリアスです。",
       envDescOpenAiApiBase:
@@ -4181,11 +4181,11 @@ export const translations: Record<Locale, TranslationTree> = {
       envDescOpenAiApiKey: "ゲートウェイ API キー用の互換エイリアスです。",
       envDescOpenAiModel: "既定モデル名用の互換エイリアスです。",
       envDescAgentEnabled:
-        "OpenClaw 内で ClawManager インスタンス Agent を有効にするかを切り替えます。",
+        "OpenClaw 内で AgentManager インスタンス Agent を有効にするかを切り替えます。",
       envDescAgentBaseUrl:
         "インスタンス内 Agent 制御プレーンクライアントが使用するベース URL です。",
       envDescAgentBootstrapToken:
-        "ClawManager がインスタンス内 Agent 用に生成するブートストラップトークンです。",
+        "AgentManager がインスタンス内 Agent 用に生成するブートストラップトークンです。",
       envDescAgentDiskLimitBytes:
         "インスタンス Agent に注入されるディスククォータです。",
       envDescAgentInstanceId:
@@ -4193,7 +4193,7 @@ export const translations: Record<Locale, TranslationTree> = {
       envDescAgentPersistentDir:
         "OpenClaw コンテナにマウントされる永続ワークスペースのパスです。",
       envDescAgentProtocolVersion:
-        "ClawManager Agent 制御面が期待するプロトコルバージョンです。",
+        "AgentManager Agent 制御面が期待するプロトコルバージョンです。",
       gpuLabel: "GPU",
       cpuCoresValue: "{value} コア",
       gpuCountValue: "GPU {count} 基",
@@ -4256,7 +4256,7 @@ export const translations: Record<Locale, TranslationTree> = {
         "このインスタンスでインフラ停止が記録されました。",
       timelineAgentRegistered: "Agent 登録",
       timelineAgentRegisteredDetail:
-        "{agentId} がプロトコル {protocol} で ClawManager に接続しました。",
+        "{agentId} がプロトコル {protocol} で AgentManager に接続しました。",
       timelineRuntimeReported: "ランタイム状態報告",
       timelineRuntimeReportedDetail:
         "Agent が gateway 状態 {gatewayStatus} と infra 状態 {infraStatus} を報告しました。",
@@ -4539,7 +4539,7 @@ export const translations: Record<Locale, TranslationTree> = {
     },
   },
   ko: {
-    app: { name: "ClawManager" },
+    app: { name: "AgentManager" },
     common: {
       loading: "불러오는 중...",
       logout: "로그아웃",
@@ -4601,7 +4601,7 @@ export const translations: Record<Locale, TranslationTree> = {
     adminLayout: adminLayoutTranslations.ko,
     securityCenter: securityCenterTranslations.ko,
     auth: {
-      signInTitle: "ClawManager 로그인",
+      signInTitle: "AgentManager 로그인",
       subtitle: "가상 데스크톱 관리 플랫폼",
       username: "사용자 이름",
       password: "비밀번호",
@@ -4613,7 +4613,7 @@ export const translations: Record<Locale, TranslationTree> = {
       noAccount: "계정이 없으신가요?",
       signUp: "회원가입",
       createAccount: "계정 만들기",
-      joinToday: "지금 ClawManager에 가입하세요",
+      joinToday: "지금 AgentManager에 가입하세요",
       chooseUsername: "사용자 이름 선택",
       enterEmail: "이메일을 입력하세요",
       createPassword: "비밀번호 만들기 (최소 8자)",
@@ -5267,7 +5267,7 @@ export const translations: Record<Locale, TranslationTree> = {
         webtop: {
           label: "Webtop 데스크톱",
           description:
-            "ClawManager를 통해 프록시되는 브라우저 기반 Linux 데스크톱",
+            "AgentManager를 통해 프록시되는 브라우저 기반 Linux 데스크톱",
         },
         custom: {
           label: "사용자 지정 이미지",
@@ -5302,14 +5302,14 @@ export const translations: Record<Locale, TranslationTree> = {
       presetRamShort: "RAM",
       presetDiskShort: "디스크",
       environmentVariables: "환경 변수",
-      clawManagerBuiltIns: "ClawManager 내장 변수",
+      clawManagerBuiltIns: "AgentManager 내장 변수",
       hideBuiltIns: "내장 변수 숨기기",
       editBuiltIns: "내장 변수 편집",
       editBuiltInsCount: "내장 변수 편집 ({count})",
       builtinOverridesConfigured:
         "{count}개의 내장 변수 덮어쓰기가 설정되었습니다. 펼쳐서 검토하거나 수정할 수 있습니다.",
       usingBuiltInDefaults:
-        "{count}개의 내장 변수에 ClawManager 기본값을 사용 중입니다.",
+        "{count}개의 내장 변수에 AgentManager 기본값을 사용 중입니다.",
       builtinOverrideHelp:
         "덮어쓰고 싶은 내장 변수만 추가하세요. 목록에 없는 변수는 기본 주입값을 유지합니다.",
       addBuiltinVariable: "내장 변수 추가",
@@ -5327,7 +5327,7 @@ export const translations: Record<Locale, TranslationTree> = {
       customEnvNameRequired: "사용자 지정 환경 변수 이름은 필수입니다.",
       invalidEnvName: "유효하지 않은 환경 변수 이름: {name}",
       reservedBuiltinEnvName:
-        "{name}은(는) ClawManager 내장 변수입니다. 내장 변수 섹션에서 편집하세요.",
+        "{name}은(는) AgentManager 내장 변수입니다. 내장 변수 섹션에서 편집하세요.",
       duplicateEnvName: "중복된 환경 변수 이름: {name}",
       openClawInjection: "OpenClaw 주입",
       selectedCount: "{count}개 선택됨",
@@ -5347,25 +5347,25 @@ export const translations: Record<Locale, TranslationTree> = {
       compilingOpenClawPreview: "OpenClaw 리소스 미리보기를 생성하는 중...",
       noChannelsSelectedForInjection: "주입할 Channel 이 선택되지 않았습니다.",
       skillInjection: "스킬 주입",
-      envManagedProxyPath: "ClawManager가 관리하는 프록시 경로",
-      envGeneratedAtRuntime: "ClawManager가 런타임에 생성",
+      envManagedProxyPath: "AgentManager가 관리하는 프록시 경로",
+      envGeneratedAtRuntime: "AgentManager가 런타임에 생성",
       envAssignedAfterCreation: "생성 후 할당",
-      envManagedAtRuntime: "ClawManager가 런타임에 관리",
+      envManagedAtRuntime: "AgentManager가 런타임에 관리",
       envDescDesktopTitleWebtop:
         "LinuxServer Webtop 컨테이너에 주입되는 데스크톱 창 제목입니다.",
       envDescDesktopTitleOpenClaw:
         "OpenClaw 브라우저 데스크톱 이미지에 표시되는 데스크톱 제목입니다.",
       envDescProxySubfolder:
-        "브라우저 접근 시 ClawManager 리버스 프록시가 사용하는 경로 접두사입니다.",
+        "브라우저 접근 시 AgentManager 리버스 프록시가 사용하는 경로 접두사입니다.",
       envDescLlmBaseUrl:
-        "ClawManager가 런타임에 생성하는 OpenClaw 게이트웨이 기본 URL입니다.",
+        "AgentManager가 런타임에 생성하는 OpenClaw 게이트웨이 기본 URL입니다.",
       envDescLlmApiKey:
-        "ClawManager가 인스턴스별로 발급하는 게이트웨이 API 키입니다.",
+        "AgentManager가 인스턴스별로 발급하는 게이트웨이 API 키입니다.",
       envDescLlmModel:
         "OpenClaw 워크스페이스에 주입되는 Gateway 모델 카탈로그 JSON이며, 첫 항목은 auto로 유지됩니다.",
       envDescLlmProvider: "OpenClaw 워크스페이스에 전달되는 제공자 힌트입니다.",
       envDescInstanceToken:
-        "ClawManager가 워크스페이스 접근용으로 생성하는 인스턴스 토큰입니다.",
+        "AgentManager가 워크스페이스 접근용으로 생성하는 인스턴스 토큰입니다.",
       envDescOpenAiBaseUrl:
         "OpenAI 호환 게이트웨이 기본 URL용 호환 별칭입니다.",
       envDescOpenAiApiBase:
@@ -5373,11 +5373,11 @@ export const translations: Record<Locale, TranslationTree> = {
       envDescOpenAiApiKey: "게이트웨이 API 키용 호환 별칭입니다.",
       envDescOpenAiModel: "기본 모델 이름용 호환 별칭입니다.",
       envDescAgentEnabled:
-        "OpenClaw 내부에서 ClawManager 인스턴스 Agent 활성화를 전환합니다.",
+        "OpenClaw 내부에서 AgentManager 인스턴스 Agent 활성화를 전환합니다.",
       envDescAgentBaseUrl:
         "인스턴스 내부 Agent 제어 클라이언트가 사용하는 기본 URL입니다.",
       envDescAgentBootstrapToken:
-        "ClawManager가 인스턴스 내부 Agent용으로 생성하는 부트스트랩 토큰입니다.",
+        "AgentManager가 인스턴스 내부 Agent용으로 생성하는 부트스트랩 토큰입니다.",
       envDescAgentDiskLimitBytes:
         "인스턴스 Agent에 주입되는 디스크 할당량입니다.",
       envDescAgentInstanceId:
@@ -5385,7 +5385,7 @@ export const translations: Record<Locale, TranslationTree> = {
       envDescAgentPersistentDir:
         "OpenClaw 컨테이너에 마운트되는 영구 워크스페이스 경로입니다.",
       envDescAgentProtocolVersion:
-        "ClawManager Agent 제어면이 기대하는 프로토콜 버전입니다.",
+        "AgentManager Agent 제어면이 기대하는 프로토콜 버전입니다.",
       gpuLabel: "GPU",
       cpuCoresValue: "{value}코어",
       gpuCountValue: "GPU {count}개",
@@ -5449,7 +5449,7 @@ export const translations: Record<Locale, TranslationTree> = {
         "이 인스턴스의 인프라 중지 기록이 남았습니다.",
       timelineAgentRegistered: "Agent 등록됨",
       timelineAgentRegisteredDetail:
-        "{agentId}가 프로토콜 {protocol}로 ClawManager에 연결했습니다.",
+        "{agentId}가 프로토콜 {protocol}로 AgentManager에 연결했습니다.",
       timelineRuntimeReported: "런타임 상태 보고됨",
       timelineRuntimeReportedDetail:
         "Agent가 게이트웨이 상태 {gatewayStatus} 및 인프라 상태 {infraStatus}를 보고했습니다.",
@@ -5730,7 +5730,7 @@ export const translations: Record<Locale, TranslationTree> = {
     },
   },
   de: {
-    app: { name: "ClawManager" },
+    app: { name: "AgentManager" },
     common: {
       loading: "Lädt...",
       logout: "Abmelden",
@@ -5792,7 +5792,7 @@ export const translations: Record<Locale, TranslationTree> = {
     adminLayout: adminLayoutTranslations.de,
     securityCenter: securityCenterTranslations.de,
     auth: {
-      signInTitle: "Bei ClawManager anmelden",
+      signInTitle: "Bei AgentManager anmelden",
       subtitle: "Plattform zur Verwaltung virtueller Desktops",
       username: "Benutzername",
       password: "Passwort",
@@ -5804,7 +5804,7 @@ export const translations: Record<Locale, TranslationTree> = {
       noAccount: "Noch kein Konto?",
       signUp: "Registrieren",
       createAccount: "Konto erstellen",
-      joinToday: "Noch heute ClawManager beitreten",
+      joinToday: "Noch heute AgentManager beitreten",
       chooseUsername: "Benutzernamen wählen",
       enterEmail: "E-Mail eingeben",
       createPassword: "Passwort erstellen (mind. 8 Zeichen)",
@@ -6478,7 +6478,7 @@ export const translations: Record<Locale, TranslationTree> = {
         webtop: {
           label: "Webtop-Desktop",
           description:
-            "Browserbasierter Linux-Desktop, der über ClawManager bereitgestellt wird",
+            "Browserbasierter Linux-Desktop, der über AgentManager bereitgestellt wird",
         },
         custom: {
           label: "Benutzerdefiniertes Image",
@@ -6515,14 +6515,14 @@ export const translations: Record<Locale, TranslationTree> = {
       presetRamShort: "RAM",
       presetDiskShort: "Disk",
       environmentVariables: "Umgebungsvariablen",
-      clawManagerBuiltIns: "ClawManager Built-ins",
+      clawManagerBuiltIns: "AgentManager Built-ins",
       hideBuiltIns: "Built-ins ausblenden",
       editBuiltIns: "Built-ins bearbeiten",
       editBuiltInsCount: "Built-ins bearbeiten ({count})",
       builtinOverridesConfigured:
         "{count} Built-in-Überschreibung(en) konfiguriert. Zum Prüfen oder Bearbeiten ausklappen.",
       usingBuiltInDefaults:
-        "Für {count} Built-in-Variablen werden die ClawManager-Standardwerte verwendet.",
+        "Für {count} Built-in-Variablen werden die AgentManager-Standardwerte verwendet.",
       builtinOverrideHelp:
         "Fügen Sie nur die Built-ins hinzu, die Sie überschreiben möchten. Nicht aufgeführte Variablen behalten ihre Standardwerte.",
       addBuiltinVariable: "Built-in-Variable hinzufügen",
@@ -6542,7 +6542,7 @@ export const translations: Record<Locale, TranslationTree> = {
         "Name der benutzerdefinierten Umgebungsvariable ist erforderlich.",
       invalidEnvName: "Ungültiger Umgebungsvariablenname: {name}",
       reservedBuiltinEnvName:
-        "{name} ist eine ClawManager-Built-in-Variable. Bearbeiten Sie sie stattdessen im Built-in-Bereich.",
+        "{name} ist eine AgentManager-Built-in-Variable. Bearbeiten Sie sie stattdessen im Built-in-Bereich.",
       duplicateEnvName: "Doppelter Umgebungsvariablenname: {name}",
       openClawInjection: "OpenClaw-Injektion",
       selectedCount: "{count} ausgewählt",
@@ -6563,25 +6563,25 @@ export const translations: Record<Locale, TranslationTree> = {
       noChannelsSelectedForInjection:
         "Keine Channels für die Injektion ausgewählt.",
       skillInjection: "Skill-Injektion",
-      envManagedProxyPath: "Von ClawManager verwalteter Proxy-Pfad",
-      envGeneratedAtRuntime: "Von ClawManager zur Laufzeit generiert",
+      envManagedProxyPath: "Von AgentManager verwalteter Proxy-Pfad",
+      envGeneratedAtRuntime: "Von AgentManager zur Laufzeit generiert",
       envAssignedAfterCreation: "Nach der Erstellung zugewiesen",
-      envManagedAtRuntime: "Von ClawManager zur Laufzeit verwaltet",
+      envManagedAtRuntime: "Von AgentManager zur Laufzeit verwaltet",
       envDescDesktopTitleWebtop:
         "Fenstertitel des Desktops, der in den LinuxServer-Webtop-Container injiziert wird.",
       envDescDesktopTitleOpenClaw:
         "Desktop-Titel, der im OpenClaw-Browser-Desktop-Image angezeigt wird.",
       envDescProxySubfolder:
-        "Pfadpräfix, das vom ClawManager-Reverse-Proxy für den Browserzugriff verwendet wird.",
+        "Pfadpräfix, das vom AgentManager-Reverse-Proxy für den Browserzugriff verwendet wird.",
       envDescLlmBaseUrl:
-        "Von ClawManager zur Laufzeit erzeugte OpenClaw-Gateway-Basis-URL.",
+        "Von AgentManager zur Laufzeit erzeugte OpenClaw-Gateway-Basis-URL.",
       envDescLlmApiKey:
-        "Von ClawManager pro Instanz ausgegebener Gateway-API-Schlüssel.",
+        "Von AgentManager pro Instanz ausgegebener Gateway-API-Schlüssel.",
       envDescLlmModel:
         "Als JSON injizierter Gateway-Modellkatalog fuer den OpenClaw-Arbeitsbereich, wobei auto der erste Eintrag bleibt.",
       envDescLlmProvider: "Provider-Hinweis für den OpenClaw-Arbeitsbereich.",
       envDescInstanceToken:
-        "Von ClawManager erzeugtes Instanztoken für den Arbeitsbereichszugriff.",
+        "Von AgentManager erzeugtes Instanztoken für den Arbeitsbereichszugriff.",
       envDescOpenAiBaseUrl:
         "Kompatibilitätsalias für die Basis-URL des OpenAI-kompatiblen Gateways.",
       envDescOpenAiApiBase:
@@ -6590,11 +6590,11 @@ export const translations: Record<Locale, TranslationTree> = {
         "Kompatibilitätsalias für den Gateway-API-Schlüssel.",
       envDescOpenAiModel: "Kompatibilitätsalias für den Standardmodellnamen.",
       envDescAgentEnabled:
-        "Schaltet den ClawManager-Instanz-Agenten innerhalb von OpenClaw ein oder aus.",
+        "Schaltet den AgentManager-Instanz-Agenten innerhalb von OpenClaw ein oder aus.",
       envDescAgentBaseUrl:
         "Basis-URL, die der In-Instance-Agent-Control-Plane-Client verwendet.",
       envDescAgentBootstrapToken:
-        "Von ClawManager für den In-Instance-Agent erzeugtes Bootstrap-Token.",
+        "Von AgentManager für den In-Instance-Agent erzeugtes Bootstrap-Token.",
       envDescAgentDiskLimitBytes:
         "Dem Instanz-Agenten injiziertes Festplattenkontingent.",
       envDescAgentInstanceId:
@@ -6602,7 +6602,7 @@ export const translations: Record<Locale, TranslationTree> = {
       envDescAgentPersistentDir:
         "Persistenter Arbeitsbereichspfad, der in den OpenClaw-Container eingehängt wird.",
       envDescAgentProtocolVersion:
-        "Von der ClawManager-Agent-Control-Plane erwartete Protokollversion.",
+        "Von der AgentManager-Agent-Control-Plane erwartete Protokollversion.",
       gpuLabel: "GPU",
       cpuCoresValue: "{value} Kerne",
       gpuCountValue: "{count} GPU(s)",
@@ -6665,7 +6665,7 @@ export const translations: Record<Locale, TranslationTree> = {
         "Der Infrastrukturstopp wurde für diese Instanz erfasst.",
       timelineAgentRegistered: "Agent registriert",
       timelineAgentRegisteredDetail:
-        "{agentId} hat sich über Protokoll {protocol} mit ClawManager verbunden.",
+        "{agentId} hat sich über Protokoll {protocol} mit AgentManager verbunden.",
       timelineRuntimeReported: "Laufzeitstatus gemeldet",
       timelineRuntimeReportedDetail:
         "Der Agent meldete Gateway-Status {gatewayStatus} und Infra-Status {infraStatus}.",
