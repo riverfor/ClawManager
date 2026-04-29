@@ -14,6 +14,7 @@ import (
 	"clawreef/internal/repository"
 	"clawreef/internal/services/k8s"
 
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -289,15 +290,15 @@ func (s *instanceService) Create(userID int, req CreateInstanceRequest) (*models
 		return nil, fmt.Errorf("failed to create PVC: %w", err)
 	}
 
-	if requiresRestrictedNetwork(instance.Type) {
-		if err := s.networkPolicyService.EnsureDefaultPolicy(ctx, userID, instance.ID, instance.Name); err != nil {
-			s.pvcService.DeletePVC(ctx, userID, instance.ID)
-			if bootstrapSnapshot != nil {
-				_ = s.openClawConfigService.MarkSnapshotFailed(bootstrapSnapshot, err)
-			}
-			s.instanceRepo.Delete(instance.ID)
-			return nil, fmt.Errorf("failed to create network policy: %w", err)
+	// Ensure any legacy per-instance network policy is removed before creating pod.
+	// This keeps new pods unrestricted even if older versions created netpols.
+	if err := s.networkPolicyService.DeletePolicy(ctx, userID, instance.ID, instance.Name); err != nil {
+		s.pvcService.DeletePVC(ctx, userID, instance.ID)
+		if bootstrapSnapshot != nil {
+			_ = s.openClawConfigService.MarkSnapshotFailed(bootstrapSnapshot, err)
 		}
+		s.instanceRepo.Delete(instance.ID)
+		return nil, fmt.Errorf("failed to delete network policy: %w", err)
 	}
 
 	// Create Pod
@@ -313,6 +314,7 @@ func (s *instanceService) Create(userID int, req CreateInstanceRequest) (*models
 		Image:              runtimeConfig.Image,
 		MountPath:          runtimeConfig.MountPath,
 		ContainerPort:      runtimeConfig.Port,
+		ImagePullPolicy:    corev1.PullPolicy(defaultImagePullPolicy()),
 		ExtraEnv:           extraEnv,
 		EnvFromSecretNames: []string{bootstrapSecretName},
 	}
@@ -320,9 +322,6 @@ func (s *instanceService) Create(userID int, req CreateInstanceRequest) (*models
 	pod, err := s.podService.CreatePod(ctx, podConfig)
 	if err != nil {
 		// Rollback: delete PVC and instance record
-		if requiresRestrictedNetwork(instance.Type) {
-			s.networkPolicyService.DeletePolicy(ctx, userID, instance.ID, instance.Name)
-		}
 		s.pvcService.DeletePVC(ctx, userID, instance.ID)
 		if bootstrapSnapshot != nil {
 			_ = s.openClawConfigService.MarkSnapshotFailed(bootstrapSnapshot, err)
@@ -344,9 +343,6 @@ func (s *instanceService) Create(userID int, req CreateInstanceRequest) (*models
 	if err != nil {
 		// Rollback: delete pod, PVC and instance record
 		s.podService.DeletePod(ctx, userID, instance.ID)
-		if requiresRestrictedNetwork(instance.Type) {
-			s.networkPolicyService.DeletePolicy(ctx, userID, instance.ID, instance.Name)
-		}
 		s.pvcService.DeletePVC(ctx, userID, instance.ID)
 		if bootstrapSnapshot != nil {
 			_ = s.openClawConfigService.MarkSnapshotFailed(bootstrapSnapshot, err)
@@ -469,11 +465,9 @@ func (s *instanceService) Start(instanceID int) error {
 		}
 	}
 
-	// Create new pod
-	if requiresRestrictedNetwork(instance.Type) {
-		if err := s.networkPolicyService.EnsureDefaultPolicy(ctx, instance.UserID, instance.ID, instance.Name); err != nil {
-			return fmt.Errorf("failed to create network policy: %w", err)
-		}
+	// Remove legacy per-instance network policy before starting pod.
+	if err := s.networkPolicyService.DeletePolicy(ctx, instance.UserID, instance.ID, instance.Name); err != nil {
+		return fmt.Errorf("failed to delete network policy: %w", err)
 	}
 
 	podConfig := k8s.PodConfig{
@@ -488,6 +482,7 @@ func (s *instanceService) Start(instanceID int) error {
 		Image:              runtimeConfig.Image,
 		MountPath:          instance.MountPath,
 		ContainerPort:      runtimeConfig.Port,
+		ImagePullPolicy:    corev1.PullPolicy(defaultImagePullPolicy()),
 		ExtraEnv:           extraEnv,
 		EnvFromSecretNames: []string{bootstrapSecretName},
 	}
@@ -532,10 +527,6 @@ func (s *instanceService) Start(instanceID int) error {
 	GetHub().BroadcastInstanceStatus(instance.UserID, instance)
 
 	return nil
-}
-
-func requiresRestrictedNetwork(instanceType string) bool {
-	return strings.TrimSpace(instanceType) != ""
 }
 
 func (s *instanceService) ensureGatewayToken(instance *models.Instance) (string, error) {
