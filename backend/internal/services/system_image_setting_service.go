@@ -10,39 +10,39 @@ import (
 )
 
 var orderedSystemImageTypes = []string{
-	"hermesagent",
 	"openclaw",
 	"ubuntu",
 	"webtop",
+	"hermes",
 	"debian",
 	"centos",
 	"custom",
 }
 
 var supportedSystemImageTypes = map[string]string{
-	"hermesagent": "HermesAgent Desktop",
-	"openclaw":    "OpenClaw Desktop",
-	"ubuntu":      "Ubuntu Desktop",
-	"webtop":      "Webtop Desktop",
-	"debian":      "Debian Desktop",
-	"centos":      "CentOS Desktop",
-	"custom":      "Custom Image",
+	"openclaw": "OpenClaw Desktop",
+	"ubuntu":   "Ubuntu Desktop",
+	"webtop":   "Webtop Desktop",
+	"hermes":   "Hermes Runtime",
+	"debian":   "Debian Desktop",
+	"centos":   "CentOS Desktop",
+	"custom":   "Custom Image",
 }
 
 var defaultSystemImageSettings = map[string]string{
-	"hermesagent": "ghcr.io/quseit/qagent-image/hermesagent:latest",
-	"openclaw":    "ghcr.io/quseit/qagent-image/openclaw:latest",
-	"ubuntu":      "lscr.io/linuxserver/webtop:ubuntu-xfce",
-	"webtop":      "lscr.io/linuxserver/webtop:ubuntu-xfce",
-	"debian":      "docker.io/clawreef/debian-desktop:12",
-	"centos":      "docker.io/clawreef/centos-desktop:9",
-	"custom":      "registry.example.com/your-custom-image:latest",
+	"openclaw": "ghcr.io/quseit/qagent-image/openclaw:latest",
+	"ubuntu":   "lscr.io/linuxserver/webtop:ubuntu-xfce",
+	"webtop":   "lscr.io/linuxserver/webtop:ubuntu-xfce",
+	"hermes":   "ghcr.io/quseit/qagent-image/hermesagent:latest",
+	"debian":   "docker.io/clawreef/debian-desktop:12",
+	"centos":   "docker.io/clawreef/centos-desktop:9",
+	"custom":   "registry.example.com/your-custom-image:latest",
 }
 
 var defaultEnabledSystemImageTypes = map[string]bool{
-	"hermesagent": true,
-	"openclaw":    true,
-	"ubuntu":      true,
+	"openclaw": true,
+	"ubuntu":   true,
+	"hermes":   true,
 }
 
 // RuntimeImageSettingsProvider exposes runtime image lookup for instance types.

@@ -37,7 +37,7 @@ type InstanceService interface {
 type CreateInstanceRequest struct {
 	Name                 string              `json:"name" validate:"required,min=3,max=50"`
 	Description          *string             `json:"description,omitempty"`
-	Type                 string              `json:"type" validate:"required,oneof=openclaw ubuntu debian centos custom webtop"`
+	Type                 string              `json:"type" validate:"required,oneof=openclaw ubuntu debian centos custom webtop hermes"`
 	CPUCores             float64             `json:"cpu_cores" validate:"required,min=0.1,max=32"`
 	MemoryGB             int                 `json:"memory_gb" validate:"required,min=1,max=128"`
 	DiskGB               int                 `json:"disk_gb" validate:"required,min=10,max=1000"`
@@ -252,25 +252,25 @@ func (s *instanceService) Create(userID int, req CreateInstanceRequest) (*models
 
 	var bootstrapSnapshot *models.OpenClawInjectionSnapshot
 	var bootstrapSecretName string
-	if strings.EqualFold(instance.Type, "openclaw") && s.openClawConfigService != nil && req.OpenClawConfigPlan != nil && hasOpenClawConfigSelections(*req.OpenClawConfigPlan) {
+	if supportsRuntimeConfigInjection(instance.Type) && s.openClawConfigService != nil && req.OpenClawConfigPlan != nil && hasOpenClawConfigSelections(*req.OpenClawConfigPlan) {
 		bootstrapSnapshot, err = s.openClawConfigService.CreateSnapshotForInstance(userID, instance, req.OpenClawConfigPlan)
 		if err != nil {
 			s.instanceRepo.Delete(instance.ID)
-			return nil, fmt.Errorf("failed to compile openclaw bootstrap config: %w", err)
+			return nil, fmt.Errorf("failed to compile runtime bootstrap config: %w", err)
 		}
 		if bootstrapSnapshot != nil {
 			instance.OpenClawConfigSnapshotID = &bootstrapSnapshot.ID
 			instance.UpdatedAt = time.Now()
 			if err := s.instanceRepo.Update(instance); err != nil {
 				s.instanceRepo.Delete(instance.ID)
-				return nil, fmt.Errorf("failed to persist openclaw snapshot reference: %w", err)
+				return nil, fmt.Errorf("failed to persist runtime snapshot reference: %w", err)
 			}
 
 			bootstrapSecretName, err = s.openClawConfigService.EnsureSnapshotSecret(ctx, userID, instance, bootstrapSnapshot.ID)
 			if err != nil {
 				_ = s.openClawConfigService.MarkSnapshotFailed(bootstrapSnapshot, err)
 				s.instanceRepo.Delete(instance.ID)
-				return nil, fmt.Errorf("failed to provision openclaw bootstrap secret: %w", err)
+				return nil, fmt.Errorf("failed to provision runtime bootstrap secret: %w", err)
 			}
 		}
 	}
@@ -373,7 +373,7 @@ func (s *instanceService) Create(userID int, req CreateInstanceRequest) (*models
 
 	if bootstrapSnapshot != nil {
 		if err := s.openClawConfigService.MarkSnapshotActive(bootstrapSnapshot); err != nil {
-			return nil, fmt.Errorf("failed to activate openclaw bootstrap snapshot: %w", err)
+			return nil, fmt.Errorf("failed to activate runtime bootstrap snapshot: %w", err)
 		}
 	}
 
@@ -458,10 +458,10 @@ func (s *instanceService) Start(instanceID int) error {
 	}
 
 	bootstrapSecretName := ""
-	if strings.EqualFold(instance.Type, "openclaw") && s.openClawConfigService != nil && instance.OpenClawConfigSnapshotID != nil && *instance.OpenClawConfigSnapshotID > 0 {
+	if supportsRuntimeConfigInjection(instance.Type) && s.openClawConfigService != nil && instance.OpenClawConfigSnapshotID != nil && *instance.OpenClawConfigSnapshotID > 0 {
 		bootstrapSecretName, err = s.openClawConfigService.EnsureSnapshotSecret(ctx, instance.UserID, instance, *instance.OpenClawConfigSnapshotID)
 		if err != nil {
-			return fmt.Errorf("failed to restore openclaw bootstrap secret: %w", err)
+			return fmt.Errorf("failed to restore runtime bootstrap secret: %w", err)
 		}
 	}
 
@@ -553,7 +553,7 @@ func (s *instanceService) buildGatewayEnv(instance *models.Instance) (map[string
 	if instance == nil || instance.AccessToken == nil || strings.TrimSpace(*instance.AccessToken) == "" {
 		return map[string]string{}, nil
 	}
-	if !strings.EqualFold(strings.TrimSpace(instance.Type), "openclaw") {
+	if !supportsManagedRuntimeIntegration(instance.Type) {
 		return map[string]string{}, nil
 	}
 
@@ -599,7 +599,7 @@ func (s *instanceService) ensureAgentBootstrapToken(instance *models.Instance) (
 }
 
 func (s *instanceService) buildAgentEnv(instance *models.Instance) (map[string]string, error) {
-	if instance == nil || !strings.EqualFold(strings.TrimSpace(instance.Type), "openclaw") {
+	if instance == nil || !supportsManagedRuntimeIntegration(instance.Type) {
 		return map[string]string{}, nil
 	}
 	if instance.AgentBootstrapToken == nil || strings.TrimSpace(*instance.AgentBootstrapToken) == "" {
@@ -619,9 +619,40 @@ func (s *instanceService) buildAgentEnv(instance *models.Instance) (map[string]s
 		"CLAWMANAGER_AGENT_BOOTSTRAP_TOKEN":  strings.TrimSpace(*instance.AgentBootstrapToken),
 		"CLAWMANAGER_AGENT_DISK_LIMIT_BYTES": strconv.FormatInt(diskLimitBytes, 10),
 		"CLAWMANAGER_AGENT_INSTANCE_ID":      fmt.Sprintf("%d", instance.ID),
-		"CLAWMANAGER_AGENT_PERSISTENT_DIR":   "/config",
+		"CLAWMANAGER_AGENT_PERSISTENT_DIR":   managedRuntimePersistentDir(instance),
 		"CLAWMANAGER_AGENT_PROTOCOL_VERSION": AgentProtocolVersionV1,
 	}, nil
+}
+
+func supportsManagedRuntimeIntegration(instanceType string) bool {
+	switch strings.ToLower(strings.TrimSpace(instanceType)) {
+	case "openclaw", "hermes":
+		return true
+	default:
+		return false
+	}
+}
+
+func supportsRuntimeConfigInjection(instanceType string) bool {
+	switch strings.ToLower(strings.TrimSpace(instanceType)) {
+	case "openclaw", "hermes":
+		return true
+	default:
+		return false
+	}
+}
+
+func managedRuntimePersistentDir(instance *models.Instance) string {
+	if instance == nil {
+		return "/config"
+	}
+	if strings.EqualFold(instance.Type, "hermes") {
+		return "/config/.hermes"
+	}
+	if strings.TrimSpace(instance.MountPath) != "" {
+		return strings.TrimSpace(instance.MountPath)
+	}
+	return defaultMountPathForInstanceType(instance.Type)
 }
 
 func (s *instanceService) resolveGatewayModelInjection() (*gatewayModelInjection, error) {
@@ -735,40 +766,53 @@ func (s *instanceService) Restart(instanceID int) error {
 	return nil
 }
 
-// Delete deletes an instance and all associated K8s resources
+// Delete starts deleting an instance and all associated K8s resources.
 func (s *instanceService) Delete(instanceID int) error {
-	ctx := context.Background()
-
 	instance, err := s.instanceRepo.GetByID(instanceID)
 	if err != nil {
 		return fmt.Errorf("failed to get instance: %w", err)
 	}
 
 	if instance == nil {
-		// Instance not in DB, but we should still try to clean up K8s resources
-		fmt.Printf("Instance %d not found in database, attempting to clean up any orphaned K8s resources\n", instanceID)
-		// Try to clean up with userID=0 (will need to scan all namespaces)
-		cleanupService := k8s.NewCleanupService()
-		cleanupService.DeleteAllInstanceResources(ctx, 0, instanceID)
 		return fmt.Errorf("instance not found")
 	}
 
-	fmt.Printf("Starting deletion of instance %d (user %d)\n", instanceID, instance.UserID)
+	if instance.Status != "deleting" {
+		now := time.Now()
+		instance.Status = "deleting"
+		instance.UpdatedAt = now
+
+		if err := s.instanceRepo.Update(instance); err != nil {
+			return fmt.Errorf("failed to mark instance as deleting: %w", err)
+		}
+
+		GetHub().BroadcastInstanceStatus(instance.UserID, instance)
+	}
+
+	go s.completeDeletion(instance.UserID, instance.ID)
+
+	return nil
+}
+
+func (s *instanceService) completeDeletion(userID, instanceID int) {
+	ctx := context.Background()
+
+	fmt.Printf("Starting background deletion of instance %d (user %d)\n", instanceID, userID)
 
 	// Use CleanupService to delete ALL resources for this instance (including duplicates)
 	cleanupService := k8s.NewCleanupService()
-	if err := cleanupService.DeleteAllInstanceResources(ctx, instance.UserID, instance.ID); err != nil {
+	if err := cleanupService.DeleteAllInstanceResources(ctx, userID, instanceID); err != nil {
 		fmt.Printf("Warning: error during resource cleanup for instance %d: %v\n", instanceID, err)
 	}
 
-	// 4. Delete instance record from database
+	// Delete instance record from database after background cleanup finishes.
 	fmt.Printf("Deleting instance %d from database...\n", instanceID)
 	if err := s.instanceRepo.Delete(instanceID); err != nil {
-		return fmt.Errorf("failed to delete instance record: %w", err)
+		fmt.Printf("Error: failed to delete instance %d record: %v\n", instanceID, err)
+		return
 	}
 
 	fmt.Printf("Instance %d deleted successfully\n", instanceID)
-	return nil
 }
 
 // cleanupOrphanedResources cleans up any orphaned K8s resources for an instance

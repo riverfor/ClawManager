@@ -59,23 +59,20 @@ func buildRuntimeConfig(instanceType, osType, osVersion string, registry, tag *s
 			"TITLE":     "ClawManager Webtop",
 			"SUBFOLDER": "/",
 		}
+	case "hermes":
+		config.Image = defaultSystemImageSettings["hermes"]
+		config.Port = 3001
+		config.MountPath = "/config/.hermes"
+		config.Env = map[string]string{
+			"TITLE":     "Hermes Runtime",
+			"SUBFOLDER": "/",
+		}
 	case "openclaw":
 		config.MountPath = "/config"
 		if (registry == nil || strings.TrimSpace(*registry) == "") && (tag == nil || strings.TrimSpace(*tag) == "") {
 			config.Image = defaultSystemImageSettings["openclaw"]
 		} else {
 			config.Image = fmt.Sprintf("%s/%s:%s", defaultRegistry, "openclaw-desktop", defaultTag)
-		}
-		config.Env = map[string]string{
-			"TITLE":     "ClawManager Desktop",
-			"SUBFOLDER": "/",
-		}
-	case "hermesagent":
-		config.MountPath = "/config"
-		if (registry == nil || strings.TrimSpace(*registry) == "") && (tag == nil || strings.TrimSpace(*tag) == "") {
-			config.Image = defaultSystemImageSettings["hermesagent"]
-		} else {
-			config.Image = fmt.Sprintf("%s/%s:%s", defaultRegistry, "hermesagent-desktop", defaultTag)
 		}
 		config.Env = map[string]string{
 			"TITLE":     "ClawManager Desktop",
@@ -93,7 +90,7 @@ func buildRuntimeConfig(instanceType, osType, osVersion string, registry, tag *s
 
 func defaultPortForInstanceType(instanceType string) int32 {
 	switch instanceType {
-	case "ubuntu", "webtop":
+	case "ubuntu", "webtop", "hermes":
 		return 3001
 	default:
 		return 3001
@@ -102,8 +99,10 @@ func defaultPortForInstanceType(instanceType string) int32 {
 
 func defaultMountPathForInstanceType(instanceType string) string {
 	switch instanceType {
-	case "ubuntu", "webtop", "openclaw", "hermesagent":
+	case "ubuntu", "webtop", "openclaw":
 		return "/config"
+	case "hermes":
+		return "/config/.hermes"
 	default:
 		return "/home/user/data"
 	}
@@ -111,9 +110,14 @@ func defaultMountPathForInstanceType(instanceType string) string {
 
 func defaultEnvForInstanceType(instanceType string) map[string]string {
 	switch instanceType {
-	case "ubuntu", "webtop", "openclaw", "hermesagent":
+	case "ubuntu", "webtop", "openclaw":
 		return map[string]string{
 			"TITLE":     "ClawManager Desktop",
+			"SUBFOLDER": "/",
+		}
+	case "hermes":
+		return map[string]string{
+			"TITLE":     "Hermes Runtime",
 			"SUBFOLDER": "/",
 		}
 	default:
@@ -146,7 +150,7 @@ func withInstanceProxyEnv(instanceType string, instanceID int, env map[string]st
 
 func usesWebtopImage(instanceType string) bool {
 	switch instanceType {
-	case "ubuntu", "webtop", "openclaw", "hermesagent":
+	case "ubuntu", "webtop", "hermes", "openclaw":
 		return true
 	default:
 		return false
@@ -154,13 +158,9 @@ func usesWebtopImage(instanceType string) bool {
 }
 
 // defaultImagePullPolicy returns the image pull policy to use for instance
-// pods. Operators can override the default ("IfNotPresent") by setting the
-// IMAGE_PULL_POLICY environment variable to "Always", "Never", or
-// "IfNotPresent".
+// pods. Managed runtime instances always use IfNotPresent so local caches can
+// be reused without forcing a remote registry pull during create/start flows.
 func defaultImagePullPolicy() string {
-	if v := strings.TrimSpace(os.Getenv("IMAGE_PULL_POLICY")); v != "" {
-		return v
-	}
 	return "IfNotPresent"
 }
 

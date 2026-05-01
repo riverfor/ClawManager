@@ -29,6 +29,7 @@
   <a href="#product-tour">Produktueberblick</a> |
   <a href="#ai-gateway">AI Gateway</a> |
   <a href="#agent-control-plane">Agent Control Plane</a> |
+  <a href="#runtime-integrations">Runtime-Integrationen</a> |
   <a href="#resource-management">Ressourcenverwaltung</a> |
   <a href="#get-started">Erste Schritte</a>
 </p>
@@ -53,6 +54,7 @@
 
 Wichtige aktuelle Produkt- und Dokumentations-Updates.
 
+- [2026-04-29] Hermes-Runtime-Integration hinzugefuegt, inklusive Webtop-basierter Instanzbereitstellung, Agent-Control-Plane-Registrierung, AI-Gateway-Injection, channel- und skill-Bootstrap sowie `.hermes` Import/Export. Siehe [Hermes Runtime Guide](./docs/hermes-runtime-agent-development.md).
 - [2026-04-08] Skill-Verwaltung und Skill-Scanning wurden der Plattform hinzugefuegt. Details siehe [Merged PR #52](https://github.com/Yuan-lab-LLM/ClawManager/pull/52).
 - [2026-03-26] Die AI-Gateway-Dokumentation wurde erweitert und deckt nun Modell-Governance, Audit und Trace, Kostenrechnung sowie Risikokontrolle genauer ab. Siehe [AI Gateway Guide](./docs/aigateway.md).
 - [2026-03-20] ClawManager hat sich zu einer breiteren Control Plane fuer AI-Agent-Workspaces entwickelt, mit staerkerer Runtime-Steuerung, wiederverwendbaren Ressourcen und Security-Scanning-Workflows.
@@ -83,6 +85,26 @@ Es eignet sich besonders fuer:
 - Plattformteams, die AI-Agent-Instanzen fuer mehrere Nutzer betreiben
 - Betriebsteams, die Runtime-Sichtbarkeit, Command-Dispatch und Desired-State-Kontrolle benoetigen
 - Entwicklungsteams, die Agent-Workspaces ueber wiederverwendbare Ressourcen statt ueber manuelle Konfiguration bereitstellen wollen
+
+<a id="runtime-integrations"></a>
+## Runtime-Integrationen
+
+ClawManager unterstuetzt derzeit die folgenden verwalteten Runtimes:
+
+- <img src="frontend/public/openclaw.png" alt="OpenClaw icon" width="18" /> `OpenClaw`: die standardmaessige OpenClaw-artige Workspace-Runtime fuer von ClawManager verwaltete Desktop-Instanzen
+- <img src="frontend/public/hermes.png" alt="Hermes icon" width="18" /> `Hermes`: eine Webtop-basierte Runtime-Integration mit persistentem `.hermes`-Workspace und eingebettetem Hermes agent
+
+Runtime-Vorschau:
+
+**<img src="frontend/public/openclaw.png" alt="OpenClaw icon" width="18" /> OpenClaw**
+
+![openclaw](./docs/images/openclaw.png)
+
+**<img src="frontend/public/hermes.png" alt="Hermes icon" width="18" /> Hermes**
+
+![hermes](./docs/images/hermes.png)
+
+Runtime-Autoren koennen dem [Hermes Runtime Guide](./docs/hermes-runtime-agent-development.md), dem [Generic Runtime Agent Integration Guide](./docs/runtime-agent-integration-guide.md) und der [Skill Content MD5 Spec](./docs/skill-content-md5-spec.md) folgen, um kompatible Agents zu bauen.
 
 <a id="get-started"></a>
 ## Erste Schritte
@@ -191,6 +213,9 @@ Siehe [Developer Guide (English)](./docs/developer-guide.md).
 - [AI Gateway Guide (English)](./docs/aigateway.md)
 - [Security / Skill Scanner Guide (English)](./docs/security-skill-scanner.md)
 - [Resource Management Guide (English)](./docs/resource-management.md)
+- [Hermes Runtime Guide](./docs/hermes-runtime-agent-development.md)
+- [Generic Runtime Agent Integration Guide](./docs/runtime-agent-integration-guide.md)
+- [Skill Content MD5 Spec](./docs/skill-content-md5-spec.md)
 - [Developer Guide (English)](./docs/developer-guide.md)
 
 ## Lizenz

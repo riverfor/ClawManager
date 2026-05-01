@@ -34,6 +34,20 @@ const (
 	OpenClawLogPoliciesEnv           = "CLAWMANAGER_OPENCLAW_LOG_POLICIES_JSON"
 	OpenClawAgentsEnv                = "CLAWMANAGER_OPENCLAW_AGENTS_JSON"
 	OpenClawScheduledTasksEnv        = "CLAWMANAGER_OPENCLAW_SCHEDULED_TASKS_JSON"
+	HermesBootstrapManifestEnv       = "CLAWMANAGER_HERMES_BOOTSTRAP_MANIFEST_JSON"
+	HermesChannelsEnv                = "CLAWMANAGER_HERMES_CHANNELS_JSON"
+	HermesSkillsEnv                  = "CLAWMANAGER_HERMES_SKILLS_JSON"
+	HermesSessionTemplatesEnv        = "CLAWMANAGER_HERMES_SESSION_TEMPLATES_JSON"
+	HermesLogPoliciesEnv             = "CLAWMANAGER_HERMES_LOG_POLICIES_JSON"
+	HermesAgentsEnv                  = "CLAWMANAGER_HERMES_AGENTS_JSON"
+	HermesScheduledTasksEnv          = "CLAWMANAGER_HERMES_SCHEDULED_TASKS_JSON"
+	RuntimeBootstrapManifestEnv      = "CLAWMANAGER_RUNTIME_BOOTSTRAP_MANIFEST_JSON"
+	RuntimeChannelsEnv               = "CLAWMANAGER_RUNTIME_CHANNELS_JSON"
+	RuntimeSkillsEnv                 = "CLAWMANAGER_RUNTIME_SKILLS_JSON"
+	RuntimeSessionTemplatesEnv       = "CLAWMANAGER_RUNTIME_SESSION_TEMPLATES_JSON"
+	RuntimeLogPoliciesEnv            = "CLAWMANAGER_RUNTIME_LOG_POLICIES_JSON"
+	RuntimeAgentsEnv                 = "CLAWMANAGER_RUNTIME_AGENTS_JSON"
+	RuntimeScheduledTasksEnv         = "CLAWMANAGER_RUNTIME_SCHEDULED_TASKS_JSON"
 	openClawBootstrapPayloadMaxBytes = 64 * 1024
 
 	openClawCompiledSnapshotStatus = "compiled"
@@ -71,6 +85,24 @@ var (
 		OpenClawConfigResourceTypeLogPolicy:       OpenClawLogPoliciesEnv,
 		OpenClawConfigResourceTypeAgent:           OpenClawAgentsEnv,
 		OpenClawConfigResourceTypeScheduledTask:   OpenClawScheduledTasksEnv,
+	}
+	hermesBootstrapEnvAliases = map[string]string{
+		OpenClawBootstrapManifestEnv: HermesBootstrapManifestEnv,
+		OpenClawChannelsEnv:          HermesChannelsEnv,
+		OpenClawSkillsEnv:            HermesSkillsEnv,
+		OpenClawSessionTemplatesEnv:  HermesSessionTemplatesEnv,
+		OpenClawLogPoliciesEnv:       HermesLogPoliciesEnv,
+		OpenClawAgentsEnv:            HermesAgentsEnv,
+		OpenClawScheduledTasksEnv:    HermesScheduledTasksEnv,
+	}
+	runtimeBootstrapEnvAliases = map[string]string{
+		OpenClawBootstrapManifestEnv: RuntimeBootstrapManifestEnv,
+		OpenClawChannelsEnv:          RuntimeChannelsEnv,
+		OpenClawSkillsEnv:            RuntimeSkillsEnv,
+		OpenClawSessionTemplatesEnv:  RuntimeSessionTemplatesEnv,
+		OpenClawLogPoliciesEnv:       RuntimeLogPoliciesEnv,
+		OpenClawAgentsEnv:            RuntimeAgentsEnv,
+		OpenClawScheduledTasksEnv:    RuntimeScheduledTasksEnv,
 	}
 	openClawResourceKeyPattern = regexp.MustCompile(`^[a-zA-Z0-9][a-zA-Z0-9_-]{1,99}$`)
 )
@@ -698,6 +730,7 @@ func (s *openClawConfigService) EnsureSnapshotSecret(ctx context.Context, userID
 	if err := json.Unmarshal([]byte(snapshot.RenderedEnvJSON), &envValues); err != nil {
 		return "", fmt.Errorf("openclaw injection snapshot env payload is invalid")
 	}
+	envValues = runtimeBootstrapEnvValues(instance.Type, envValues)
 
 	secretName := snapshot.SecretName
 	if secretName == nil || strings.TrimSpace(*secretName) == "" {
@@ -729,6 +762,62 @@ func (s *openClawConfigService) EnsureSnapshotSecret(ctx context.Context, userID
 	}
 
 	return *secretName, nil
+}
+
+func runtimeBootstrapEnvValues(instanceType string, envValues map[string]string) map[string]string {
+	result := map[string]string{}
+	for key, value := range envValues {
+		result[key] = value
+	}
+
+	if !strings.EqualFold(instanceType, "hermes") {
+		return result
+	}
+
+	addBootstrapEnvAliases(result, hermesBootstrapEnvAliases)
+	addBootstrapEnvAliases(result, runtimeBootstrapEnvAliases)
+	return result
+}
+
+func addBootstrapEnvAliases(envValues map[string]string, aliases map[string]string) {
+	for source, target := range aliases {
+		value, ok := envValues[source]
+		if !ok {
+			continue
+		}
+		if source == OpenClawBootstrapManifestEnv {
+			if aliasedManifest, err := aliasBootstrapManifestEnvNames(value, aliases); err == nil {
+				value = aliasedManifest
+			}
+		}
+		envValues[target] = value
+	}
+}
+
+func aliasBootstrapManifestEnvNames(raw string, aliases map[string]string) (string, error) {
+	var manifest map[string]interface{}
+	if err := json.Unmarshal([]byte(raw), &manifest); err != nil {
+		return "", err
+	}
+
+	payloads, ok := manifest["payloads"].([]interface{})
+	if !ok {
+		return marshalJSONString(manifest)
+	}
+	for _, item := range payloads {
+		payload, ok := item.(map[string]interface{})
+		if !ok {
+			continue
+		}
+		envName, ok := payload["env"].(string)
+		if !ok {
+			continue
+		}
+		if alias, exists := aliases[envName]; exists {
+			payload["env"] = alias
+		}
+	}
+	return marshalJSONString(manifest)
 }
 
 func (s *openClawConfigService) ListSnapshots(userID int, limit int) ([]OpenClawInjectionSnapshotPayload, error) {
@@ -1296,6 +1385,57 @@ func normalizeOpenClawChannelConfigForEnv(resourceKey string, configPayload inte
 	return configPayload
 }
 
+// mergeOpenClawChannelConfigForStorage combines the allowlist-normalized config
+// with the original parsed payload so storage retains keys the env-render path
+// does not surface (e.g. webhook, custom capabilities, additional feishu
+// accounts). Normalized keys always override the original; unknown keys pass
+// through untouched. For feishu the accounts map is merged member-wise so
+// accounts other than main, and sibling fields inside main, both survive.
+func mergeOpenClawChannelConfigForStorage(resourceKey string, original, normalized interface{}) interface{} {
+	normalizedMap, normalizedOk := normalized.(map[string]interface{})
+	originalMap, originalOk := original.(map[string]interface{})
+	if !normalizedOk {
+		return normalized
+	}
+	if !originalOk {
+		return normalizedMap
+	}
+
+	merged := make(map[string]interface{}, len(originalMap)+len(normalizedMap))
+	for k, v := range originalMap {
+		merged[k] = v
+	}
+	for k, v := range normalizedMap {
+		merged[k] = v
+	}
+
+	if strings.ToLower(strings.TrimSpace(resourceKey)) == "feishu" {
+		originalAccounts, _ := originalMap["accounts"].(map[string]interface{})
+		normalizedAccounts, _ := normalizedMap["accounts"].(map[string]interface{})
+		if originalAccounts != nil || normalizedAccounts != nil {
+			mergedAccounts := make(map[string]interface{})
+			for k, v := range originalAccounts {
+				mergedAccounts[k] = v
+			}
+			if normalizedMain, ok := normalizedAccounts["main"].(map[string]interface{}); ok {
+				mergedMain := make(map[string]interface{})
+				if existingMain, ok := originalAccounts["main"].(map[string]interface{}); ok {
+					for k, v := range existingMain {
+						mergedMain[k] = v
+					}
+				}
+				for k, v := range normalizedMain {
+					mergedMain[k] = v
+				}
+				mergedAccounts["main"] = mergedMain
+			}
+			merged["accounts"] = mergedAccounts
+		}
+	}
+
+	return merged
+}
+
 func normalizeFeishuChannelConfigForEnv(configPayload interface{}) map[string]interface{} {
 	config, ok := configPayload.(map[string]interface{})
 	if !ok {
@@ -1461,8 +1601,15 @@ func normalizeOpenClawResourceContent(resourceType, resourceKey string, raw json
 	}
 
 	normalizedConfig := normalizeOpenClawChannelConfigForEnv(resourceKey, configPayload)
+	// Preserve unknown fields at storage time: the *ForEnv helpers rebuild the
+	// config from a known-field allowlist, which is correct for rendering runtime
+	// env but would silently drop tenant-authored keys (e.g. webhook, custom
+	// capabilities, additional feishu accounts) if applied verbatim to stored
+	// content. Merge the allowlist output back over the original payload so
+	// storage is a superset of the normalized render.
+	mergedConfig := mergeOpenClawChannelConfigForStorage(resourceKey, configPayload, normalizedConfig)
 	envelope.Format = openClawChannelFormat(resourceKey)
-	envelope.Config, err = json.Marshal(normalizedConfig)
+	envelope.Config, err = json.Marshal(mergedConfig)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal normalized openclaw channel config")
 	}
