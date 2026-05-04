@@ -107,7 +107,7 @@ func (s *PodService) CreatePod(ctx context.Context, config PodConfig) (*corev1.P
 			},
 		},
 		Spec: corev1.PodSpec{
-			RestartPolicy: corev1.RestartPolicyNever,
+			RestartPolicy: corev1.RestartPolicyAlways,
 			Containers: []corev1.Container{
 				{
 					Name:            "desktop",

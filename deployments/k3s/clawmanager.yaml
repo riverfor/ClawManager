@@ -750,8 +750,8 @@ spec:
     app: clawmanager-app
   ports:
     - name: api
-      port: 8443
-      targetPort: 8443
+      port: 9001
+      targetPort: 9001
 ---
 apiVersion: v1
 kind: Service
@@ -765,7 +765,7 @@ spec:
   ports:
     - name: proxy
       port: 3128
-      targetPort: 8443
+      targetPort: 9001
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -784,7 +784,7 @@ spec:
     spec:
       containers:
         - name: skill-scanner
-          image: ghcr.io/yuan-lab-llm/skill-scanner:latest
+          image: ghcr.io/quseit/skill-scanner:latest
           imagePullPolicy: IfNotPresent
           command:
             - /opt/skill-scanner-venv/bin/skill-scanner-api
