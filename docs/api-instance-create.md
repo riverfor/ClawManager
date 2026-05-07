@@ -6,14 +6,14 @@
 POST /api/v1/instances
 ```
 
-路由注册于 `backend/cmd/server/main.go:185`。
+路由注册于 `backend/cmd/server/main.go:186`。
 
 ## 请求参数 (JSON Body)
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `name` | string | ✅ | 实例名称，长度 3~50 |
-| `type` | string | ✅ | 类型：`openclaw`, `ubuntu`, `debian`, `centos`, `custom`, `webtop`, `hermesagent` |
+| `type` | string | ✅ | 类型：`openclaw`, `ubuntu`, `debian`, `centos`, `custom`, `webtop`, `hermes` |
 | `cpu_cores` | float64 | ✅ | CPU 核数，0.1~32 |
 | `memory_gb` | int | ✅ | 内存 GB，1~128 |
 | `disk_gb` | int | ✅ | 磁盘 GB，10~1000 |
@@ -42,7 +42,7 @@ POST /api/v1/instances
 ```typescript
 interface CreateInstanceRequest {
   name: string;
-  type: "openclaw" | "ubuntu" | "debian" | "centos" | "custom" | "webtop" | "hermesagent";
+  type: "openclaw" | "ubuntu" | "debian" | "centos" | "custom" | "webtop" | "hermes";
   cpu_cores: number;
   memory_gb: number;
   disk_gb: number;
