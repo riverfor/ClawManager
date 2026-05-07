@@ -3,6 +3,7 @@ package k8s
 import (
 	"context"
 	"fmt"
+	"io"
 	"time"
 
 	corev1 "k8s.io/api/core/v1"
@@ -10,6 +11,8 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
+	"k8s.io/client-go/kubernetes/scheme"
+	"k8s.io/client-go/tools/remotecommand"
 )
 
 // PodService handles Pod operations
@@ -334,6 +337,65 @@ func containsSubstring(s, substr string) bool {
 		}
 	}
 	return false
+}
+
+// ExecOptions controls the behavior of PodService.Exec.
+type ExecOptions struct {
+	Container string
+	Command   []string
+	Stdin     io.Reader
+	Stdout    io.Writer
+	Stderr    io.Writer
+	TTY       bool
+}
+
+// Exec runs a command inside the pod backing the given instance and streams
+// stdin/stdout/stderr through the supplied io interfaces. A non-zero exit code
+// from the command is reported via *k8sexec.CodeExitError — callers can use
+// errors.As to surface it as a normal business result rather than a transport
+// failure.
+func (s *PodService) Exec(ctx context.Context, userID, instanceID int, opts ExecOptions) error {
+	if s.client == nil || s.client.Clientset == nil || s.client.Config == nil {
+		return fmt.Errorf("k8s client not initialized")
+	}
+	if len(opts.Command) == 0 {
+		return fmt.Errorf("exec command is empty")
+	}
+	if opts.Container == "" {
+		return fmt.Errorf("exec container is empty")
+	}
+
+	pod, err := s.GetPod(ctx, userID, instanceID)
+	if err != nil {
+		return fmt.Errorf("failed to get pod: %w", err)
+	}
+
+	req := s.client.Clientset.CoreV1().RESTClient().Post().
+		Resource("pods").
+		Name(pod.Name).
+		Namespace(pod.Namespace).
+		SubResource("exec")
+
+	req.VersionedParams(&corev1.PodExecOptions{
+		Container: opts.Container,
+		Command:   opts.Command,
+		Stdin:     opts.Stdin != nil,
+		Stdout:    opts.Stdout != nil,
+		Stderr:    opts.Stderr != nil,
+		TTY:       opts.TTY,
+	}, scheme.ParameterCodec)
+
+	executor, err := remotecommand.NewSPDYExecutor(s.client.Config, "POST", req.URL())
+	if err != nil {
+		return fmt.Errorf("failed to initialize exec stream: %w", err)
+	}
+
+	return executor.StreamWithContext(ctx, remotecommand.StreamOptions{
+		Stdin:  opts.Stdin,
+		Stdout: opts.Stdout,
+		Stderr: opts.Stderr,
+		Tty:    opts.TTY,
+	})
 }
 
 func (s *PodService) waitForPodDeletion(ctx context.Context, namespace, podName string) error {

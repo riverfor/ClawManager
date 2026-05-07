@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"io"
@@ -41,10 +42,11 @@ type InstanceHandler struct {
 	openClawTransferService       services.OpenClawTransferService
 	openClawConfigService         services.OpenClawConfigService
 	skillService                  services.SkillService
+	execService                   services.InstanceExecService
 }
 
 // NewInstanceHandler creates a new instance handler
-func NewInstanceHandler(instanceService services.InstanceService, instanceAgentService services.InstanceAgentService, runtimeStatusService services.InstanceRuntimeStatusService, instanceCommandService services.InstanceCommandService, instanceConfigRevisionService services.InstanceConfigRevisionService, openClawConfigService services.OpenClawConfigService, skillService services.SkillService) *InstanceHandler {
+func NewInstanceHandler(instanceService services.InstanceService, instanceAgentService services.InstanceAgentService, runtimeStatusService services.InstanceRuntimeStatusService, instanceCommandService services.InstanceCommandService, instanceConfigRevisionService services.InstanceConfigRevisionService, openClawConfigService services.OpenClawConfigService, skillService services.SkillService, execService services.InstanceExecService) *InstanceHandler {
 	accessService := services.NewInstanceAccessService()
 	return &InstanceHandler{
 		instanceService:               instanceService,
@@ -57,6 +59,7 @@ func NewInstanceHandler(instanceService services.InstanceService, instanceAgentS
 		openClawTransferService:       services.NewOpenClawTransferService(),
 		openClawConfigService:         openClawConfigService,
 		skillService:                  skillService,
+		execService:                   execService,
 	}
 }
 
@@ -75,6 +78,21 @@ type InstanceRuntimeDetailsResponse struct {
 
 type CreateRuntimeCommandRequest struct {
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
+}
+
+type ExecuteCommandRequest struct {
+	Container      string   `json:"container,omitempty"`
+	Command        []string `json:"command" binding:"required,min=1,dive,required"`
+	Stdin          string   `json:"stdin,omitempty"`
+	TimeoutSeconds int      `json:"timeout_seconds,omitempty"`
+}
+
+type ExecuteCommandResponse struct {
+	ExitCode   int    `json:"exit_code"`
+	Stdout     string `json:"stdout"`
+	Stderr     string `json:"stderr"`
+	DurationMs int64  `json:"duration_ms"`
+	Truncated  bool   `json:"truncated"`
 }
 
 type PublishConfigRevisionRequest struct {
@@ -1071,6 +1089,57 @@ func (h *InstanceHandler) ImportHermes(c *gin.Context) {
 	}
 
 	utils.Success(c, http.StatusOK, "Hermes workspace imported successfully", nil)
+}
+
+// ExecuteCommand runs a one-shot command inside the pod backing the instance
+// and returns stdout/stderr plus the exit code. Non-zero exits are reported
+// via the response body — only transport / k8s-API failures map to non-2xx.
+func (h *InstanceHandler) ExecuteCommand(c *gin.Context) {
+	instance, ok := h.requireOwnedInstance(c)
+	if !ok {
+		return
+	}
+
+	c.Request.Body = http.MaxBytesReader(c.Writer, c.Request.Body, 1<<20)
+
+	var req ExecuteCommandRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		utils.Error(c, http.StatusBadRequest, fmt.Sprintf("invalid request: %v", err))
+		return
+	}
+
+	timeout := time.Duration(req.TimeoutSeconds) * time.Second
+
+	result, err := h.execService.Execute(c.Request.Context(), instance.ID, services.InstanceExecRequest{
+		Container: req.Container,
+		Command:   req.Command,
+		Stdin:     req.Stdin,
+		Timeout:   timeout,
+	})
+	if err != nil {
+		switch {
+		case errors.Is(err, services.ErrExecEmptyCommand),
+			errors.Is(err, services.ErrExecContainerNotFound):
+			utils.Error(c, http.StatusBadRequest, err.Error())
+		case errors.Is(err, services.ErrExecInstanceNotFound):
+			utils.Error(c, http.StatusNotFound, err.Error())
+		case errors.Is(err, services.ErrExecInstanceNotRunning):
+			utils.Error(c, http.StatusConflict, err.Error())
+		case errors.Is(err, context.DeadlineExceeded):
+			utils.Error(c, http.StatusGatewayTimeout, "command timed out")
+		default:
+			utils.Error(c, http.StatusBadGateway, fmt.Sprintf("exec failed: %v", err))
+		}
+		return
+	}
+
+	utils.Success(c, http.StatusOK, "Command executed", ExecuteCommandResponse{
+		ExitCode:   result.ExitCode,
+		Stdout:     result.Stdout,
+		Stderr:     result.Stderr,
+		DurationMs: result.Duration.Milliseconds(),
+		Truncated:  result.Truncated,
+	})
 }
 
 func (h *InstanceHandler) requireOwnedInstance(c *gin.Context) (*models.Instance, bool) {
