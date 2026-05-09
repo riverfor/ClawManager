@@ -741,8 +741,10 @@ spec:
           image: ghcr.io/quseit/clawmanager:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - name: http
+            - name: https
               containerPort: 8443
+            - name: proxy
+              containerPort: 9001
           env:
             - name: SERVER_ADDRESS
               value: ":9001"
@@ -810,7 +812,7 @@ spec:
           readinessProbe:
             httpGet:
               path: /healthz
-              port: 8443
+              port: https
               scheme: HTTPS
             initialDelaySeconds: 10
             periodSeconds: 5
@@ -818,7 +820,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /healthz
-              port: 8443
+              port: https
               scheme: HTTPS
             initialDelaySeconds: 30
             periodSeconds: 20
@@ -839,7 +841,7 @@ spec:
       targetPort: 8080
     - name: https
       port: 443
-      targetPort: 8443
+      targetPort: https
       nodePort: 30443
 ---
 apiVersion: v1
