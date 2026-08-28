@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clawmanager-ingress
+  namespace: clawmanager-system
+  annotations:
+    # 使用 Traefik 的 HTTP 和 HTTPS 入口点
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    # 强制将 HTTP 重定向到 HTTPS
+    traefik.ingress.kubernetes.io/redirect-entry-point: websecure
+    traefik.ingress.kubernetes.io/redirect-permanent: "true"
+    # 可选：如果需要保留 cert-manager 自动续期，可以保留下面这行
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+  - host: agentman.quseit.cn
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: clawmanager-frontend
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - agentman.quseit.cn
+    secretName: agentman-tls  # 使用你现有的证书 Secret
